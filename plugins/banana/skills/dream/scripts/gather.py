@@ -26,6 +26,20 @@ def recent_transcripts(project: Path, days: int):
     return sorted(out)
 
 
+def project_cwd(transcripts):
+    """从最近一份 transcript 里读出项目真实路径（jsonl 行内的 cwd 字段）。"""
+    for _, f in reversed(transcripts):
+        with open(f, errors="replace") as fh:
+            for line in fh:
+                try:
+                    cwd = json.loads(line).get("cwd")
+                except json.JSONDecodeError:
+                    continue
+                if cwd:
+                    return cwd
+    return "-"
+
+
 def cmd_list(days: int):
     rows = []
     for project in sorted(PROJECTS.iterdir()):
@@ -38,12 +52,13 @@ def cmd_list(days: int):
         if mem_files == 0 and not recent:
             continue
         latest = max((m for m, _ in recent), default=None)
-        rows.append((latest, project.name, mem_files, len(recent), total))
+        rows.append((latest, project.name, mem_files, len(recent), total,
+                     project_cwd(recent)))
     rows.sort(key=lambda r: (r[0] is not None, r[0]), reverse=True)
-    print(f"project\tmemory_files\trecent_{days}d\ttotal_transcripts\tlast_active")
-    for latest, name, mem, rec, total in rows:
+    print(f"project\tmemory_files\trecent_{days}d\ttotal_transcripts\tlast_active\tpath")
+    for latest, name, mem, rec, total, path in rows:
         ts = latest.strftime("%Y-%m-%d") if latest else "-"
-        print(f"{name}\t{mem}\t{rec}\t{total}\t{ts}")
+        print(f"{name}\t{mem}\t{rec}\t{total}\t{ts}\t{path}")
 
 
 def iter_user_prompts(path: Path):
