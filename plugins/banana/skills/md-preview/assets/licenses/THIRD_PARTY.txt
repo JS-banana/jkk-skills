@@ -1,0 +1,12 @@
+This skill bundles the following third-party software:
+
+Mistune 3.3.4
+Source: https://github.com/lepture/mistune
+License: BSD-3-Clause
+License text: mistune-LICENSE.txt
+
+Mermaid 11.16.0
+Source: https://github.com/mermaid-js/mermaid
+License: MIT
+License text: mermaid-LICENSE.txt
+

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="{{LANG}}" data-theme="system" data-resolved-theme="light" data-width="balanced" data-density="comfortable">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="{{DECK}}">
+  <meta name="report-source-sha256" content="{{SOURCE_SHA}}">
+  <link rel="icon" href="data:,">
+  <title>{{TITLE}}</title>
+  <style>{{CSS}}</style>
+  <script>{{MERMAID_JS}}</script>
+</head>
+<body class="{{ARCHETYPE}}">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <div class="reading-progress" aria-hidden="true"><span id="reading-progress-bar"></span></div>
+
+  <header class="app-bar">
+    <button type="button" class="icon-button toc-toggle" id="toc-toggle" aria-controls="toc-panel" aria-expanded="false">
+      <span aria-hidden="true">☰</span><span class="sr-only">打开目录</span>
+    </button>
+    <a class="wordmark" href="#report-top" aria-label="返回报告顶部">
+      <span class="wordmark-mark">FG</span>
+      <span><strong>Field Guide</strong><small>source-bound edition</small></span>
+    </a>
+    <div class="source-health" title="{{SOURCE_PATH}}">
+      <span class="health-pulse" aria-hidden="true"></span>
+      <span>源文档已绑定</span>
+      <code>{{SOURCE_SHA_SHORT}}</code>
+    </div>
+    <div class="app-actions" aria-label="阅读设置">
+      <button type="button" class="text-button" id="width-toggle" aria-label="切换阅读宽度">
+        <span aria-hidden="true">↔</span><span class="action-label">宽度</span>
+      </button>
+      <button type="button" class="text-button" id="density-toggle" aria-label="切换内容密度">
+        <span aria-hidden="true">≡</span><span class="action-label">密度</span>
+      </button>
+      <button type="button" class="text-button" id="theme-toggle" aria-label="切换颜色主题">
+        <span id="theme-icon" aria-hidden="true">◐</span><span class="action-label" id="theme-label">跟随系统</span>
+      </button>
+      <button type="button" class="text-button" id="source-open" aria-haspopup="dialog" aria-label="查看原始 Markdown">
+        <span aria-hidden="true">⌘</span><span class="action-label">原文</span>
+      </button>
+      <button type="button" class="text-button" id="print-report" aria-label="打印报告">
+        <span aria-hidden="true">↗</span><span class="action-label">打印</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="reading-layout">
+    <nav class="toc-panel" id="toc-panel" aria-label="报告目录">
+      <div class="rail-heading">
+        <p>Contents</p>
+        <button type="button" class="icon-button toc-close" id="toc-close">
+          <span aria-hidden="true">×</span><span class="sr-only">关闭目录</span>
+        </button>
+      </div>
+      {{TOC}}
+      <div class="toc-foot">
+        <p>{{SECTION_COUNT}} 个章节 · 约 {{READING_MINUTES}} 分钟</p>
+        <p class="mono">{{SOURCE_NAME}}</p>
+      </div>
+    </nav>
+
+    <main id="main-content" tabindex="-1">
+      <section class="report-hero" id="report-top" aria-labelledby="report-title">
+        <div class="hero-stripe" aria-hidden="true">
+          <span>DEPLOYMENT / FIELD GUIDE</span><span>{{NARRATIVE_AXIS}}</span><span>{{RENDERED_AT}}</span>
+        </div>
+        <div class="opening-spread">
+          <div class="opening-title">
+            <div class="hero-kicker">
+              <p>{{EYEBROW}}</p>
+              {{STATUS}}
+            </div>
+            <h1 id="report-title">{{TITLE}}</h1>
+            <p class="hero-deck">{{DECK}}</p>
+            {{SOURCE_META}}
+          </div>
+          <aside class="decision-brief" aria-labelledby="summary-title">
+            <p class="summary-label">Decision brief / 00</p>
+            <h2 id="summary-title">先判定，再进入细节</h2>
+            <p class="decision-copy">{{SUMMARY}}</p>
+            <div class="next-move">
+              <span>下一步</span>
+              <p>{{NEXT_MOVE}}</p>
+            </div>
+            <button type="button" class="source-card-button" data-open-source>核对原始 Markdown</button>
+          </aside>
+        </div>
+        {{SYSTEM_FLOW}}
+        {{HIGHLIGHTS}}
+        {{FEATURED_VISUAL}}
+      </section>
+
+      <div class="field-presentation">
+        {{FIELD_PRESENTATION}}
+      </div>
+
+      <details class="source-dossier" id="source-dossier" open>
+        <summary>
+          <span class="source-dossier-index">06 / COMPLETE DOSSIER</span>
+          <span>
+            <strong>完整技术资料</strong>
+            <small>保留原 Markdown 的全部章节、表格、命令与证据</small>
+          </span>
+          <span class="source-dossier-action">展开 / 收起</span>
+        </summary>
+        <article class="report-article" aria-label="{{TITLE_ATTR}}正文">
+          {{ARTICLE}}
+        </article>
+      </details>
+
+      <footer class="report-footer">
+        <div>
+          <p class="footer-label">Source of truth</p>
+          <p>{{SOURCE_PATH}}</p>
+        </div>
+        <div>
+          <p class="footer-label">SHA-256</p>
+          <code>{{SOURCE_SHA}}</code>
+        </div>
+        <p>此 HTML 是内容编排后的派生阅读产物；事实修改应先回到 Markdown 源文档。</p>
+      </footer>
+    </main>
+  </div>
+
+  <button type="button" class="back-to-top" id="back-to-top" aria-label="返回顶部">↑</button>
+  <div class="toc-scrim" id="toc-scrim" hidden></div>
+
+  <dialog class="source-dialog" id="source-dialog" aria-labelledby="source-dialog-title">
+    <div class="dialog-bar">
+      <div>
+        <p class="dialog-eyebrow">Immutable source snapshot</p>
+        <h2 id="source-dialog-title">{{SOURCE_NAME}}</h2>
+      </div>
+      <button type="button" class="icon-button dialog-close" data-close-dialog="source-dialog">
+        <span aria-hidden="true">×</span><span class="sr-only">关闭原文</span>
+      </button>
+    </div>
+    <div class="source-dialog-meta">
+      <span>{{SOURCE_PATH}}</span><code>{{SOURCE_SHA}}</code>
+    </div>
+    <pre id="source-markdown" tabindex="0">{{SOURCE_MARKDOWN}}</pre>
+  </dialog>
+
+  <dialog class="diagram-dialog" id="diagram-dialog" aria-labelledby="diagram-dialog-title">
+    <div class="dialog-bar">
+      <div>
+        <p class="dialog-eyebrow">Diagram focus</p>
+        <h2 id="diagram-dialog-title">结构图</h2>
+      </div>
+      <div class="diagram-dialog-actions">
+        <button type="button" class="icon-button" id="diagram-zoom-out" aria-label="缩小">−</button>
+        <button type="button" class="icon-button" id="diagram-zoom-reset" aria-label="重置缩放">1:1</button>
+        <button type="button" class="icon-button" id="diagram-zoom-in" aria-label="放大">＋</button>
+        <button type="button" class="icon-button dialog-close" data-close-dialog="diagram-dialog">
+          <span aria-hidden="true">×</span><span class="sr-only">关闭结构图</span>
+        </button>
+      </div>
+    </div>
+    <div class="diagram-stage" id="diagram-stage"></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="application/json" id="report-manifest">{{MANIFEST_JSON}}</script>
+  <script>{{APP_JS}}</script>
+</body>
+</html>
