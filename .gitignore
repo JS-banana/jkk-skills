@@ -3,8 +3,9 @@ __pycache__/
 *.pyc
 .wrangler/
 
-# demand-radar 运行产物（skill 写 /tmp/，仓库不存数据）
+# find-gap 运行产物（skill 写 /tmp/，仓库不存数据）
 demand_radar_data/
+find_gap_data/
 
 # 开发工作区（需求/设计/调研/素材），仅本地保留
 docs/

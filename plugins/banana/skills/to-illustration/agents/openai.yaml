@@ -1,0 +1,6 @@
+interface:
+  display_name: "To Illustration"
+  short_description: "Design pencil editorial and annotated concept illustrations"
+  default_prompt: "Use $to-illustration to turn this article or idea into a coherent hand-drawn illustration."
+policy:
+  allow_implicit_invocation: true

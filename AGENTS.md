@@ -21,9 +21,9 @@
 
 ## 事实源（易踩坑）
 
-- **demand-radar 的 schema 权威源是用户的活飞书 Base**（`lark-cli base +field-list` 查询），
+- **find-gap 的 schema 权威源是用户的活飞书 Base**（`lark-cli base +field-list` 查询），
   skill 内 `scripts/run.py` + `references/feishu-schema.md` 应镜像活库。
-  `docs/demand-radar/design.md` 已废弃且枚举值有错——任何 schema 改动前先查活库，别信它。
+  `docs/find-gap/design.md` 已废弃且枚举值有错——任何 schema 改动前先查活库，别信它。
 - skill 的运行知识以 `SKILL.md` 和其直接引用的 `references/` 为准；
   开发期需求、设计和调研留在 `docs/`，不得作为安装后的运行时依赖。
 - skill 的规范类内容（写作规则、最佳实践）需有实证来源，调研素材存 `docs/research/`；
@@ -46,6 +46,6 @@
 
 - 改过 manifest 后校验 JSON：
   `python3 -c "import json; json.load(open('.claude-plugin/marketplace.json')); json.load(open('plugins/banana/.claude-plugin/plugin.json'))"`
-- 改过 writer-readme-md skill 后：
-  `python3 plugins/banana/skills/writer-readme-md/scripts/validate.py --skill plugins/banana/skills/writer-readme-md`
+- 改过 write-readme skill 后：
+  `python3 plugins/banana/skills/write-readme/scripts/validate.py --skill plugins/banana/skills/write-readme`
 - 提交信息用 gitmoji + Conventional Commits（中文描述），一次提交只含一件事。

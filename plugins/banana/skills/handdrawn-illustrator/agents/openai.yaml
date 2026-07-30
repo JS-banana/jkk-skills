@@ -1,6 +1,0 @@
-interface:
-  display_name: "Handdrawn Illustrator"
-  short_description: "Design pencil editorial and annotated concept illustrations"
-  default_prompt: "Use $handdrawn-illustrator to turn this article or idea into a coherent hand-drawn illustration."
-policy:
-  allow_implicit_invocation: true
