@@ -26,6 +26,35 @@ or register for, with a concrete reward and a direct link.
 - For a user-forwarded notice, read only `references/bitable-api-patterns.md`
   unless the notice needs web verification.
 
+## Scan Integrity Rules (hard gates, do not skip)
+
+These rules prevent silent coverage gaps. If any rule cannot be met, report the
+reason in `【未覆盖】` — never silently skip.
+
+1. **Structured endpoints first, in one call.** Run `scripts/collect_structured.py`
+   to batch-fetch AgentDeadlines + Devpost + CompeteHub (双月) + aihot in a single
+   tool call. Do not curl each source individually.
+
+2. **Community signals are mandatory.** Run `agent-reach doctor --json` before
+   any community queries. Query at least ONE Chinese community source AND ONE
+   English community source per scan. If agent-reach is unavailable, use
+   DDG/web_search as fallback — but never skip this step entirely.
+
+3. **At least one broad discovery query.** Run `broad_zh` OR `broad_en` every
+   daily scan (see `references/keyword-clusters.md`). This catches domestic
+   events that aggregators miss (外滩大会, WeaveFox, 小红书黑客松, etc.).
+
+4. **Devpost pagination: stop at 2 pages in daily scan.** The filter
+   `themes[]=Machine Learning/AI` + `status[]=open` limits results to ~30.
+   Pages 3+ add diminishing returns; save them for weekly deep scans.
+
+5. **aihot failure is not silent.** If `collect_structured.py` reports aihot
+   extraction failed, try Jina Reader (`r.jina.ai`) before marking it uncovered.
+
+6. **Expired candidates must be filtered.** Any deadline < today (UTC) is
+   expired. Reject before scoring. If deadline is ambiguous, verify — do not
+   assume expiry from publish date.
+
 ## Opportunity Gate
 
 Keep only opportunities that pass all hard gates:
@@ -65,22 +94,33 @@ exceptional.
      do not use `execute_code` or shell append.
    - Completion: field contract, seen baseline, and any schema drift are known.
 
-3. Collect candidates.
-   - Public scan: structured endpoints first, per the 结构化优先原则 in
-     `source-registry.md` — AgentDeadlines (JSON-LD), Devpost (JSON API),
-     CompeteHub, and aihot lead; search queries only catch what the aggregators
-     miss. Then rotate remaining Tier A sources. For weekly deep scans, active
-     queries, or community scans, run `agent-reach doctor --json` first when
-     available and choose the active backend for Twitter/X, Reddit, Xiaohongshu,
-     Bilibili, V2EX, Exa, RSS, or web.
-   - Use `tool-fallbacks.md` when agent-reach, Tavily, Twitter, DDG, curl, Exa,
-     or Firecrawl paths fail.
-   - User-forwarded notice: extract the candidate from the message first; only
-     search enough to confirm official source, reward, deadline, and URL.
-   - Deadline reminder: read the Base or the `即将截止 (7天内)` view, then verify
-     current status before notifying.
-   - Completion: every candidate has source, title, URL, reward, deadline or
-     long-term status, and raw evidence.
+3. Collect candidates (three mandatory phases, in order).
+
+   **Phase A — Structured endpoints (1 call):**
+   Run `scripts/collect_structured.py`. This fetches AgentDeadlines,
+   Devpost (auto-paginated), CompeteHub (current + next month), and
+   aihot.today (with Jina fallback) in parallel. Save the JSON output.
+   Do not curl individual sources — use this script.
+
+   **Phase B — Community signals (2-3 calls, mandatory):**
+   - Run `agent-reach doctor --json` first. Note which backends are active.
+   - Query at least ONE Chinese source: OpenCLI xiaohongshu if active, or
+     linux.do JSON API, or V2EX API.
+   - Query at least ONE English source: OpenCLI reddit if active, or X/Twitter
+     if authenticated, or HN Algolia API.
+   - If agent-reach is unavailable, use DDG `site:` queries as fallback.
+     Never skip this phase — report missing backends in 未覆盖.
+
+   **Phase C — Broad discovery (1 call, mandatory):**
+   Run `broad_zh` or `broad_en` (rotate daily). These catch domestic
+   events (外滩大会/WeaveFox/小红书) and niche international ones that
+   aggregators miss.
+
+   User-forwarded notice: skip phases B-C; only verify the forwarded URL.
+   Deadline reminder: read existing Base records, verify status, notify.
+
+   Completion: every candidate has source, title, URL, reward, deadline or
+   long-term status, and raw evidence.
 
 4. Gate, dedupe, and score.
    - Reject before scoring when a hard gate fails.
@@ -163,4 +203,7 @@ difficulty + low score is `跳过`.
 - `scripts/parse_agentdeadlines.py`: parse downloaded AgentDeadlines HTML.
 - `scripts/parse_competehub.py`: parse downloaded CompeteHub monthly page HTML;
   the only working curl path for CompeteHub data.
+- `scripts/collect_structured.py`: **batch collector** — fetches AgentDeadlines
+  + Devpost (all pages) + CompeteHub (双月) + aihot (with Jina fallback) in
+  one parallel call. Use this instead of individual curl commands.
 - `scripts/campaign_bitable_sync.py`: deterministic Feishu Base write path.

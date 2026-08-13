@@ -207,6 +207,7 @@ the opportunity absent.
 - **登录墙**：HackathonWeekly `/events`。
 - **重定向**：火山引擎 `/activity` → `/activities`（curl 加 `-L`）。
 - **域名注意**：互动吧用 `hudongba.com`（`www.hdb.com` 证书不匹配）。
+- **⚠️ CompeteHub RSC 覆盖缺口（2026-07-30 实测）**：月度页的 RSC payload 按「本月开始」聚合竞赛，跨月活动（如外滩大会黑客松 7/24 上线、9/12 颁奖）可能因排序或渲染片段截断而**不出现**在 `parse_competehub.py` 的 150 条提取结果中。DDG 搜索可命中独立竞赛页（`competehub.dev/zh/competitions/<slug>`），但独立页也是 RSC 渲染。**缓解**：每日巡检时额外跑一次 `broad_zh` 查询（见 Tier A 通用发现），捕获 CompeteHub 月度页遗漏的国内大厂黑客松。
 
 ---
 
@@ -219,7 +220,7 @@ the opportunity absent.
 | 读取 seen 记录 | 1 | 本地 |
 | 结构化端点直取 | 3-4 | agentdeadlines(JSON-LD) + devpost(JSON API) + competehub + aihot |
 | Tier A 补充搜索 | 2-3 | hn_algolia + (lablab / tianchi / dorahacks 轮换) |
-| Tier A 社区信号 | 1-2 | x_hackathon + (linuxdo / reddit 轮换) |
+| Tier A 社区信号 | 1-2 | x_hackathon + (linuxdo / reddit 轮换) — **必须执行**，不可因预算跳过 |
 | Tier A 通用发现查询 | 0-1 | broad_en OR broad_zh 轮换（结构化源已覆盖大盘，仅捕漏网） |
 | 提取详情页 | 2-3 | 候选活动的详情页 |
 | 写入 seen 记录 | 1 | 本地 |
@@ -243,3 +244,5 @@ the opportunity absent.
 发现新活动时，记录"首次出现源"。如果某个源持续产出独家信号，提升其优先级；如果某源连续 10 次巡检无新信号，降级或移除。
 
 **反馈闭环**：每次"知道晚了"的活动 → 反推最早出现的源 → 加入注册表。
+
+- **2026-07-30 外滩大会黑客松**：首个面向全民的 AI Coding 大赛（WeaveFox×小红书×观猹×9大AI Coding平台），InfoQ/CSDN/新浪/腾讯新闻 7/22 集中报道，CompeteHub 有独立页面但月度 RSC 遗漏。**首次出现源**：WeaveFox 官方 + 小红书社群 + 新闻媒体报道；**注册表响应**：Tier A 社区信号升级为必须执行、CompeteHub 月度覆盖缺口已记录。
