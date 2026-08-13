@@ -37,16 +37,30 @@ FORBIDDEN_SKILL_FILES = [
     "assets/templates/monorepo.md",
 ]
 
-PLACEHOLDER_PATTERNS = [
-    r"\{\{[^}]+\}\}",
-    r"\{owner\}",
-    r"\{repo\}",
-    r"\bOWNER\b",
-    r"\bREPO\b",
-    r"\buser/repo\b",
-    r"\bTODO\b",
-    r"\bFIXME\b",
-    r"Project Name",
+# Unresolved template syntax. Outside a code block these are always defects;
+# inside one they may be documented template variables, so they only warn.
+TEMPLATE_PLACEHOLDERS = [
+    ("template variable", r"\{\{[^}]+\}\}"),
+    ("owner placeholder", r"\{owner\}"),
+    ("repo placeholder", r"\{repo\}"),
+    ("sample repo slug", r"\buser/repo\b"),
+    ("sample project name", r"Project Name"),
+]
+
+# Context-dependent markers: legitimate as environment variables, Roadmap
+# headings, or documented substitutions. Always reported as warnings so the
+# reviewer judges each hit instead of chasing a false failure.
+AMBIGUOUS_MARKERS = [
+    ("owner placeholder", r"\bOWNER\b"),
+    ("repo placeholder", r"\bREPO\b"),
+    ("unfinished marker", r"\bTODO\b"),
+    ("unfinished marker", r"\bFIXME\b"),
+]
+
+# Badge URLs are the one place OWNER/REPO is never legitimate.
+BADGE_PLACEHOLDER_PATTERNS = [
+    r"img\.shields\.io/[^)\s\"']*(\{|\}|OWNER|REPO|user/repo)",
+    r"github\.com/(OWNER|\{owner\}|user)/(REPO|\{repo\}|repo)/",
 ]
 
 def read(path: Path) -> str:
@@ -155,28 +169,64 @@ def code_block_languages(content: str) -> tuple[int, int]:
     return total, with_lang
 
 
-def relative_refs(content: str) -> list[str]:
-    refs: list[str] = []
-    patterns = [
-        r"!\[[^\]]*\]\(([^)]+)\)",
-        r"\[[^\]]+\]\(([^)]+)\)",
-        r"src=[\"']([^\"']+)[\"']",
-    ]
-    for pattern in patterns:
-        refs.extend(re.findall(pattern, content))
-    result = []
-    for ref in refs:
-        clean = ref.split()[0].strip("<>")
-        if re.match(r"^(https?:|mailto:|#)", clean):
+def iter_lines(content: str) -> list[tuple[int, str, bool]]:
+    """Yield (line number, line, inside fenced code block)."""
+    rows: list[tuple[int, str, bool]] = []
+    in_block = False
+    for number, line in enumerate(content.splitlines(), start=1):
+        if re.match(r"^\s*```", line):
+            in_block = not in_block
+            rows.append((number, line, True))
             continue
-        if clean.startswith("data:"):
-            continue
-        result.append(clean.split("#", 1)[0])
-    return [ref for ref in result if ref]
+        rows.append((number, line, in_block))
+    return rows
 
 
-def validate_readme(readme: Path) -> list[str]:
+REF_PATTERNS = [
+    r"!\[[^\]]*\]\(([^)]+)\)",
+    r"\[[^\]]+\]\(([^)]+)\)",
+    r"src=[\"']([^\"']+)[\"']",
+]
+
+
+def relative_refs(content: str) -> list[tuple[int, str]]:
+    seen: set[tuple[int, str]] = set()
+    result: list[tuple[int, str]] = []
+    for number, line, in_block in iter_lines(content):
+        if in_block:
+            continue
+        for pattern in REF_PATTERNS:
+            for ref in re.findall(pattern, line):
+                clean = ref.split()[0].strip("<>")
+                if re.match(r"^(https?:|mailto:|#|data:)", clean):
+                    continue
+                clean = clean.split("#", 1)[0]
+                if clean and (number, clean) not in seen:
+                    seen.add((number, clean))
+                    result.append((number, clean))
+    return result
+
+
+def repo_root(start: Path) -> Path:
+    """Nearest ancestor holding .git, which is how a host resolves /abs links."""
+    for candidate in [start, *start.parents]:
+        if (candidate / ".git").exists():
+            return candidate
+    return start
+
+
+def resolve_ref(readme: Path, ref: str) -> Path:
+    # A leading slash resolves from the repository root on GitHub and friends.
+    # Joining it onto the README's directory would discard that directory and
+    # probe the filesystem root instead.
+    if ref.startswith("/"):
+        return repo_root(readme.parent) / ref.lstrip("/")
+    return readme.parent / ref
+
+
+def validate_readme(readme: Path) -> tuple[list[str], list[str]]:
     errors: list[str] = []
+    warnings: list[str] = []
     content = read(readme)
     headings = markdown_headings(content)
     h1_count = sum(1 for level, _ in headings if level == 1)
@@ -187,25 +237,33 @@ def validate_readme(readme: Path) -> list[str]:
     if total_blocks and with_lang < total_blocks:
         errors.append("some fenced code blocks lack language identifiers")
 
-    for pattern in PLACEHOLDER_PATTERNS:
-        if re.search(pattern, content):
-            errors.append(f"placeholder or sample token remains: {pattern}")
+    for number, line, in_block in iter_lines(content):
+        for label, pattern in TEMPLATE_PLACEHOLDERS:
+            for hit in re.findall(pattern, line):
+                text = hit if isinstance(hit, str) else hit[0]
+                where = errors if not in_block else warnings
+                suffix = "" if not in_block else " (inside a code block; confirm it documents a template)"
+                where.append(f"line {number}: unresolved {label} {text!r}{suffix}")
+        for label, pattern in AMBIGUOUS_MARKERS:
+            if re.search(pattern, line):
+                warnings.append(
+                    f"line {number}: possible {label} in {line.strip()[:70]!r}"
+                )
 
-    broken: list[str] = []
-    for ref in relative_refs(content):
-        if not (readme.parent / ref).exists():
-            broken.append(ref)
-    if broken:
-        errors.append("broken relative references: " + ", ".join(sorted(set(broken))))
+    for number, ref in relative_refs(content):
+        if not resolve_ref(readme, ref).exists():
+            errors.append(f"line {number}: broken relative reference {ref!r}")
 
-    if re.search(r"img\.shields\.io/.+(\{|\}|OWNER|REPO|user/repo)", content):
-        errors.append("badge contains unresolved owner/repo placeholder")
+    for pattern in BADGE_PLACEHOLDER_PATTERNS:
+        for number, line, _ in iter_lines(content):
+            if re.search(pattern, line):
+                errors.append(f"line {number}: badge has an unresolved owner/repo")
 
     styles = set(re.findall(r"img\.shields\.io/[^)\s\"']*[?&]style=([a-z-]+)", content))
     if len(styles) > 1:
         errors.append("mixed shields.io badge styles: " + ", ".join(sorted(styles)))
 
-    return errors
+    return errors, warnings
 
 
 def main() -> int:
@@ -218,10 +276,16 @@ def main() -> int:
         args.skill = Path(__file__).resolve().parents[1]
 
     errors: list[str] = []
+    warnings: list[str] = []
     if args.skill:
         errors.extend(f"skill: {e}" for e in validate_skill(args.skill.resolve()))
     if args.readme:
-        errors.extend(f"readme: {e}" for e in validate_readme(args.readme.resolve()))
+        readme_errors, readme_warnings = validate_readme(args.readme.resolve())
+        errors.extend(f"readme: {e}" for e in readme_errors)
+        warnings.extend(f"readme: {w}" for w in readme_warnings)
+
+    for warning in warnings:
+        print(f"WARN {warning}")
 
     if errors:
         for error in errors:

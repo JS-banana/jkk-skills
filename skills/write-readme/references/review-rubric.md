@@ -57,7 +57,11 @@ Assumptions:
 
 Validation:
 - `python3 scripts/validate.py --readme README.md` passed.
+- Warning at line 40 (`TODO` in a heading) is an intentional Roadmap section.
 ```
+
+Report every `WARN` the script emitted with either the fix applied or the reason
+it is intended. Silently dropping warnings hides real leftovers.
 
 For code-review style requests, lead with findings before score or summary.
 

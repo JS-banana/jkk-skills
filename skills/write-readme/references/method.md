@@ -90,5 +90,18 @@ When a README draft is available as a file, run:
 python3 scripts/validate.py --readme README.md
 ```
 
+The script reports two severities, both with line numbers:
+
+- `FAIL` is a defect to fix: unresolved template syntax in prose, a broken
+  relative reference, a badge with an unresolved owner/repo, no single H1,
+  fenced blocks without a language, or mixed badge styles.
+- `WARN` needs your judgment and is not automatically a defect. Tokens such as
+  `OWNER`, `REPO`, `TODO`, and `{{var}}` are legitimate when they are a
+  documented environment variable, a real Roadmap heading, or template syntax
+  the README is explaining. Read the quoted line, then either fix it or state in
+  the report why it is intended.
+
+Do not "fix" a warning by deleting content the README meant to document.
+
 Use the script for deterministic checks. Use `references/review-rubric.md` for
 judgment calls such as value clarity, audience fit, and example usefulness.
