@@ -6,6 +6,7 @@ description: >
   reading preview with content-aware information architecture. Use when the
   user wants a designed reading page instead of raw Markdown, or when another
   research skill needs a human-facing report.
+license: MIT
 ---
 
 # To HTML

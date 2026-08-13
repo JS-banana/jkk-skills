@@ -7,6 +7,7 @@ description: >
   "生成项目文档", "README 太烂了", "把 README 弄好看点", "write project
   docs", or /write-readme. Not for agent context files such as
   AGENTS.md or CLAUDE.md — use write-agent-context for those.
+license: MIT
 ---
 
 # Write README

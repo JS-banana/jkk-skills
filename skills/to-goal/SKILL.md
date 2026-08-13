@@ -2,6 +2,7 @@
 name: to-goal
 description: 把一个 agent-ready ticket 编译成可粘贴到任意新会话执行的 goal 契约。在 /to-tickets 之后、开执行会话之前使用。
 disable-model-invocation: true
+license: MIT
 ---
 
 # To Goal

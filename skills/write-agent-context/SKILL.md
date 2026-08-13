@@ -10,6 +10,7 @@ description: >
   CLAUDE.md", "优化 AGENTS.md", "上下文文件怎么写", "给仓库加 agent 规则", or
   /write-agent-context. Not for human-facing README or project docs — use
   write-readme for those.
+license: MIT
 ---
 
 # Write Agent Context

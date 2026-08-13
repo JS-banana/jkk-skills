@@ -1,6 +1,7 @@
 ---
 name: repo-map
 description: 用 Git 历史为陌生代码库建立证据地图与优先阅读路线。当用户接手、总览或评估新仓库，询问活跃区域、反复修复点、贡献者、维护节奏或应该先读哪些文件时使用。
+license: MIT
 ---
 
 # Repo Map

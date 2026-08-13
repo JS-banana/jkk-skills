@@ -4,6 +4,7 @@ description: >
   记忆巩固（做梦）：回顾各项目近期会话，沉淀经验、清理过时与冗余记忆、重建索引。
   当用户说 /deep-memoir、/dream、「做梦」、「整理记忆」、「沉淀经验」时使用；
   不用于单次会话内的临时总结。
+license: MIT
 ---
 
 # Deep Memoir

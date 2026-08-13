@@ -6,6 +6,7 @@ description: >
   images before publishing, rewrite Markdown image links to public URLs, build
   or query an asset manifest/catalog, verify Wrangler/R2 setup, or prepare blog
   and WeChat article images for durable public access.
+license: MIT
 ---
 
 # R2 Image Host

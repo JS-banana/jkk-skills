@@ -1,9 +1,0 @@
-{
-  "name": "banana",
-  "description": "Skills for AI campaign/demand radars, asset publishing, and documentation writing",
-  "version": "1.0.0",
-  "author": {
-    "name": "Sunss"
-  },
-  "keywords": ["writing", "documentation", "context", "readme", "research", "demand-mining", "radar", "assets"]
-}

@@ -2,6 +2,7 @@
 name: to-illustration
 description: >-
   Design and generate coherent pencil-drawn editorial, annotated and simple explanatory illustrations from Chinese articles or single ideas. Use when the user asks for 文章配图、手绘批注图、概念图、技术概念解释、简单流程图、聊天辅助表达 or an illustration shot list. Route articles through a 3–5 image plan before generation and render clear single concepts directly. Do not use for photo editing, logos, full poster/card/PPT layouts, or exact technical diagrams with strict topology.
+license: MIT
 ---
 
 # To Illustration

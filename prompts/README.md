@@ -2,7 +2,7 @@
 
 收藏的提示词与 AI 使用沉淀。每条 prompt 一个 md 文件，按场景分目录存放，格式见 [_template.md](_template.md)。
 
-反复使用、验证有效的 prompt，考虑提炼固化为 `plugins/banana/skills/` 下的 skill。
+反复使用、验证有效的 prompt，考虑提炼固化为 `skills/` 下的 skill。
 
 ## 索引
 

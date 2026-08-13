@@ -2,6 +2,7 @@
 name: product-ui-craft
 description: Orchestrate product truth, experience architecture, art direction, motion, assets, faithful frontend implementation, and browser evidence as one traceable experience spine. Invoke manually for greenfield products, application redesigns, or feature changes that may invalidate approved UX or visual work.
 disable-model-invocation: true
+license: MIT
 ---
 
 # Product UI Craft

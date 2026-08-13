@@ -7,6 +7,7 @@ description: >
   comparing or validating candidates, developing Chinese/English counterparts,
   or explaining a chosen name. Not for routine code identifiers such as local
   variables or database columns.
+license: MIT
 ---
 
 # Give Name

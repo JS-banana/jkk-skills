@@ -113,8 +113,8 @@ python3 scripts/campaign_bitable_sync.py \
 ```
 
 In Hermes, the deployed script may live at
-`~/.hermes/scripts/campaign_bitable_sync.py`. In this repo, use
-`plugins/banana/skills/find-bounty/scripts/campaign_bitable_sync.py`.
+`~/.hermes/scripts/campaign_bitable_sync.py`. Otherwise use this skill's own
+`scripts/campaign_bitable_sync.py`.
 Both paths require `--base-token` or `AI_CAMPAIGN_BASE_TOKEN`; `--table-id` or
 `AI_CAMPAIGN_TABLE_ID` is only needed when overriding the bundled default table.
 

@@ -5,6 +5,7 @@ description: >
   campaigns: hackathons, challenges, credits, beta incentives, data contests,
   feedback rewards, content rewards, user-forwarded campaign notices, or Hermes
   cron AI activity radar scans.
+license: MIT
 ---
 
 # Find Bounty
