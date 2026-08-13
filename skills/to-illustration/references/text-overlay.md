@@ -1,6 +1,6 @@
 # Exact Text Overlay
 
-Use this only after two model text failures. It repairs correctness, not lettering style; reject the result if it looks typeset against `assets/lettering-board.png`.
+Use this only after two model text failures. It repairs correctness, not lettering style; reject the result if it looks typeset against `assets/lettering-board.jpg`.
 
 ## Requirements
 

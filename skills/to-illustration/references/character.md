@@ -26,4 +26,4 @@ The traveler must push, pull, carry, repair, measure, steer, cross, hold, sort o
 - Keep hands visibly connected to tools and feet grounded when contact matters.
 - Use at most one hand-held prop unless the thesis requires two.
 - Preserve body scale across a set, even when the environment scale changes.
-- Do not copy the supplied watermarked character references. Use `assets/character-sheet.png` as the only runtime identity source.
+- Do not copy the supplied watermarked character references. Use `assets/character-sheet.jpg` as the only runtime identity source.

@@ -15,8 +15,8 @@ Resolve `SKILL_DIR` to the installed directory containing this `SKILL.md`; use a
 
 - Before choosing a scene, read `references/composition.md`.
 - Before every generation, read `references/visual-language.md` and `references/prompting.md` in full.
-- When any visible text appears, use `assets/lettering-board.png` as a lettering reference.
-- When the traveler appears, also read `references/character.md` and use `assets/character-sheet.png` as a reference.
+- When any visible text appears, use `assets/lettering-board.jpg` as a lettering reference.
+- When the traveler appears, also read `references/character.md` and use `assets/character-sheet.jpg` as a reference.
 - Before delivery, read `references/quality-bar.md` and apply every hard gate.
 
 ## 1. Route and lock the thesis
@@ -41,9 +41,9 @@ Complete this step only when the composition can be described as one caught scen
 
 Follow `references/prompting.md`. Use the built-in image generation tool; do not add a provider layer.
 
-- Pass `assets/style-board.png` as Image 1, a style reference only.
-- When text appears, pass `assets/lettering-board.png` as the next reference and follow its hierarchy and hand rhythm without copying its words or objects.
-- When the traveler is present, pass `assets/character-sheet.png` as the next reference and preserve its invariants.
+- Pass `assets/style-board.jpg` as Image 1, a style reference only.
+- When text appears, pass `assets/lettering-board.jpg` as the next reference and follow its hierarchy and hand rhythm without copying its words or objects.
+- When the traveler is present, pass `assets/character-sheet.jpg` as the next reference and preserve its invariants.
 - Quote every in-image string and follow the register-specific text budget in `references/visual-language.md`.
 - Generate article images separately, never as a contact sheet.
 
@@ -54,7 +54,7 @@ Complete this step when the output exists at the requested ratio and the final p
 View every output and apply `references/quality-bar.md`.
 
 - Fix one failure at a time while restating all invariants.
-- When text is correct but looks typeset, repair only its lettering against `assets/lettering-board.png`; do not use the overlay script for a style failure.
+- When text is correct but looks typeset, repair only its lettering against `assets/lettering-board.jpg`; do not use the overlay script for a style failure.
 - For wrong text, make one text-only repair. If it still fails, regenerate the same scene with clean blank label zones.
 - After two text failures, read `references/text-overlay.md`, then overlay exact labels only if its requirements are available:
 
