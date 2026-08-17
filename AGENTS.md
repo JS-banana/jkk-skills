@@ -48,7 +48,7 @@
 
 ## 验证
 
-- 改过 skill 目录结构或 frontmatter 后，确认 12 个 skill 都能被发现：
+- 改过 skill 目录结构或 frontmatter 后，确认 13 个 skill 都能被发现：
   `npx -y skills@latest add . --list`（须列出全部，无重复、无遗漏）
 - 改过 write-readme skill 后：
   `python3 skills/write-readme/scripts/validate.py --skill skills/write-readme`

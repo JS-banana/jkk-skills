@@ -1,0 +1,7 @@
+interface:
+  display_name: "Deep Learn"
+  short_description: "Build evidence-backed understanding through independent research"
+  default_prompt: "Use $deep-learn to research this topic systematically and build a verified, transferable knowledge model."
+
+policy:
+  allow_implicit_invocation: false

@@ -29,6 +29,7 @@ Copilot 等均可使用。指定目标 agent 用 `-a`，例如 `-a claude-code -
 
 | 技能 | 功能 |
 |------|------|
+| [deep-learn](skills/deep-learn/) | 手动触发的深度研究：多路线独立探索、一手证据与对抗验证，产出可迁移的知识模型 |
 | [deep-memoir](skills/deep-memoir/) | 记忆巩固：扫描各项目会话记录与 memory，报告先行地沉淀、合并、清理长期记忆 |
 | [find-bounty](skills/find-bounty/) | 发现、筛选、提醒并记录 AI/编程活动机会 |
 | [find-gap](skills/find-gap/) | 采集、筛选、验证真实用户需求信号，并准备飞书多维表格记录 |
