@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>🍌 banana-skills</h1>
+  <h1>jkk-skills</h1>
   <p><b>小帅的 AI 资产库：Agent Skills + prompts 沉淀</b></p>
 </div>
 
@@ -7,13 +7,13 @@
 
 ```bash
 # 交互选择要装的技能（CLI 会自动识别你装了哪些 agent）
-npx skills add JS-banana/banana-skills
+npx skills add JS-banana/jkk-skills
 
 # 装单个技能，并全局可用
-npx skills add JS-banana/banana-skills --skill find-gap -g
+npx skills add JS-banana/jkk-skills --skill find-gap -g
 
 # 只想看有哪些技能，不安装
-npx skills add JS-banana/banana-skills --list
+npx skills add JS-banana/jkk-skills --list
 ```
 
 技能遵循 [Agent Skills 规范](https://agentskills.io)，Claude Code、Cursor、Codex、

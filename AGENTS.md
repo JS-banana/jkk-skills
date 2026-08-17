@@ -6,7 +6,7 @@
 
 ## 命名
 
-- 仓库 `JS-banana/banana-skills`。2026-07 前曾用名 `jkk` / `jjk-skills`，勿再引入旧拼写。
+- 仓库 `JS-banana/jkk-skills`。曾用名 `banana-skills`，安装命令与文档一律用 `jkk-skills`，勿再引入旧拼写。
 
 ## 结构约定
 
