@@ -1,6 +1,6 @@
 # AGENTS.md
 
-个人 AI 资产库：`skills/`（Agent Skills，跨 agent 通用）+ `prompts/`（提示词沉淀）
+个人 Agent Skills 库：`skills/`（Agent Skills，跨 agent 通用）
 + `docs/`（specs / ADR / 调研，**已 gitignore，仅本地**）。
 纯 Markdown/JSON/Python 脚本仓库，无构建系统、无测试套件。
 
@@ -17,8 +17,7 @@
   `references/y.md`）。安装时只拷贝单个 skill 目录，任何跨目录引用在用户机器上必然失效。
 - `docs/<skill>/` 是该 skill 的开发工作区（需求 / 设计 / ADR），`docs/research/` 放调研素材。
   仓库根目录不放散落脚本或运行数据。
-- 新增或改名 skill 后，同步更新 README 的技能列表；新增 prompt 后，
-  同步更新 `prompts/README.md` 的索引。
+- 新增或改名 skill 后，同步更新 README 的技能列表。
 - 仅 Claude Code 支持的 frontmatter 字段（如 `disable-model-invocation`）在其他
   agent 上会被忽略，别把「只能手动触发」当作跨 agent 的硬保证。
 
@@ -48,7 +47,7 @@
 
 ## 验证
 
-- 改过 skill 目录结构或 frontmatter 后，确认 13 个 skill 都能被发现：
+- 改过 skill 目录结构或 frontmatter 后，确认 14 个 skill 都能被发现：
   `npx -y skills@latest add . --list`（须列出全部，无重复、无遗漏）
 - 改过 write-readme skill 后：
   `python3 skills/write-readme/scripts/validate.py --skill skills/write-readme`

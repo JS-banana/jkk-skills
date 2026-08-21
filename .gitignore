@@ -9,3 +9,7 @@ find_gap_data/
 
 # 开发工作区（需求/设计/调研/素材），仅本地保留
 docs/
+
+# agent 上下文文件，仅本地保留
+AGENTS.md
+CLAUDE.md
