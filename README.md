@@ -1,6 +1,7 @@
 <div align="center">
+  <img src="assets/logo.svg" width="120" alt="jkk-skills logo">
   <h1>jkk-skills</h1>
-  <p><b>小帅的 AI 资产库：Agent Skills + prompts 沉淀</b></p>
+  <p><b>小帅的 Agent Skills 技能库</b></p>
 </div>
 
 ## 📦 安装
@@ -10,14 +11,15 @@
 npx skills add JS-banana/jkk-skills
 
 # 装单个技能，并全局可用
-npx skills add JS-banana/jkk-skills --skill find-gap -g
+npx skills add JS-banana/jkk-skills --skill deep-learn -g
 
 # 只想看有哪些技能，不安装
 npx skills add JS-banana/jkk-skills --list
 ```
 
 技能遵循 [Agent Skills 规范](https://agentskills.io)，Claude Code、Cursor、Codex、
-Copilot 等均可使用。指定目标 agent 用 `-a`，例如 `-a claude-code -a cursor`；
+Copilot 等均可使用。
+指定目标 agent 用 `-a`，例如 `-a claude-code -a cursor`；
 不指定时 CLI 会装到通用的 `.agents/skills/`，部分 agent 不读该目录。
 
 安装后无需配置，在对话中直接描述任务即可自动触发，
@@ -40,18 +42,6 @@ Copilot 等均可使用。指定目标 agent 用 `-a`，例如 `-a claude-code -
 | [to-goal](skills/to-goal/) | 把 agent-ready ticket 编译成可粘贴执行的 goal 契约：快照绑定、证据三态、机器可验证完成标准 |
 | [to-html](skills/to-html/) | 将 Markdown 研究、技术报告和实施指南编排为友好、可离线分享的 HTML 阅读预览页 |
 | [to-illustration](skills/to-illustration/) | 将文章或概念设计成构图统一、角色一致的铅笔编辑插图、手写批注图与简单解释图 |
+| [to-simple-code](skills/to-simple-code/) | 对已有代码或本轮改动做证据驱动的化简，以对抗审查收敛重复事实、状态、契约和过度设计 |
 | [write-agent-context](skills/write-agent-context/) | 创建和审查 AGENTS.md/CLAUDE.md 等 agent 上下文文件 |
 | [write-readme](skills/write-readme/) | 基于项目证据生成/审查 README，含排版、徽章与双语规范 |
-
-## 🗂️ 仓库结构
-
-| 目录 | 内容 |
-|------|------|
-| `skills/` | 可安装的技能，每个子目录一个技能 |
-| `prompts/` | 收藏的提示词与 AI 使用沉淀（[索引](prompts/README.md)） |
-
-技能的 specs / ADR / 调研素材保留在本地 `docs/`，不入库。
-
-## 📄 License
-
-[MIT](LICENSE)
