@@ -19,11 +19,11 @@ npx skills add JS-banana/jkk-skills --list
 
 技能遵循 [Agent Skills 规范](https://agentskills.io)，Claude Code、Cursor、Codex、
 Copilot 等均可使用。
+
 指定目标 agent 用 `-a`，例如 `-a claude-code -a cursor`；
-不指定时 CLI 会装到通用的 `.agents/skills/`，部分 agent 不读该目录。
 
 安装后无需配置，在对话中直接描述任务即可自动触发，
-如「帮我写 README」「优化 AGENTS.md」「跑一次需求雷达」。
+如「帮我写 README」「优化 AGENTS.md」。
 
 ---
 
