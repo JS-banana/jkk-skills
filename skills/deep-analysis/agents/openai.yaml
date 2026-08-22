@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deep Analysis"
+  short_description: "Bounded, evidence-aware analysis with provisional judgments"
+  default_prompt: "Use $deep-analysis to answer this bounded question with evidence, caveats, and a provisional judgment."
