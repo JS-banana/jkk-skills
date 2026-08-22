@@ -29,19 +29,17 @@ Copilot 等均可使用。
 
 ## ✨ 技能列表
 
-| 技能 | 功能 |
-|------|------|
-| [deep-learn](skills/deep-learn/) | 手动触发的深度研究：多路线独立探索、一手证据与对抗验证，产出可迁移的知识模型 |
-| [deep-memoir](skills/deep-memoir/) | 记忆巩固：扫描各项目会话记录与 memory，报告先行地沉淀、合并、清理长期记忆 |
-| [find-bounty](skills/find-bounty/) | 发现、筛选、提醒并记录 AI/编程活动机会 |
-| [find-gap](skills/find-gap/) | 采集、筛选、验证真实用户需求信号，并准备飞书多维表格记录 |
-| [give-name](skills/give-name/) | 为公司、品牌、项目、仓库、网站、社区等创作、比较并验证有品味的名称 |
-| [product-ui-craft](skills/product-ui-craft/) | 手动串联产品事实、体验架构、艺术指导、动效、素材、实现与真实验收的体验主干 |
-| [r2-image-host](skills/r2-image-host/) | 压缩图片、发布到 Cloudflare R2，并维护 Markdown 图床 URL 与资产台账 |
-| [repo-map](skills/repo-map/) | 用 Git 历史建立陌生代码库的证据地图与优先阅读路线 |
-| [to-goal](skills/to-goal/) | 把 agent-ready ticket 编译成可粘贴执行的 goal 契约：快照绑定、证据三态、机器可验证完成标准 |
-| [to-html](skills/to-html/) | 将 Markdown 研究、技术报告和实施指南编排为友好、可离线分享的 HTML 阅读预览页 |
-| [to-illustration](skills/to-illustration/) | 将文章或概念设计成构图统一、角色一致的铅笔编辑插图、手写批注图与简单解释图 |
-| [to-simple-code](skills/to-simple-code/) | 对已有代码或本轮改动做证据驱动的化简，以对抗审查收敛重复事实、状态、契约和过度设计 |
-| [write-agent-context](skills/write-agent-context/) | 创建和审查 AGENTS.md/CLAUDE.md 等 agent 上下文文件 |
-| [write-readme](skills/write-readme/) | 基于项目证据生成/审查 README，含排版、徽章与双语规范 |
+| 技能 | 触发 | 功能 |
+|------|------|------|
+| [deep-learn](skills/deep-learn/) | 仅用户 | 深度研究：多路线独立探索、一手证据与对抗验证，产出可迁移的知识模型 |
+| [deep-analysis](skills/deep-analysis/) | 用户 + 模型 | 有边界的证据分析：默认检索、可选横纵镜头，并给出带限制的暂定判断 |
+| [deep-memory](skills/deep-memory/) | 仅用户 | 记忆巩固：扫描各项目会话记录与 memory，报告先行地沉淀、合并、清理长期记忆 |
+| [find-bounty](skills/find-bounty/) | 仅用户 | 发现、筛选、提醒并记录 AI/编程活动机会 |
+| [find-gap](skills/find-gap/) | 仅用户 | 采集、筛选、验证真实用户需求信号，并准备飞书多维表格记录 |
+| [give-name](skills/give-name/) | 用户 + 模型 | 为公司、品牌、项目、仓库、网站、社区等创作、比较并验证有品味的名称 |
+| [to-html](skills/to-html/) | 用户 + 模型 | 将 Markdown 研究、技术报告和实施指南编排为友好、可离线分享的 HTML 阅读预览页 |
+| [to-illustration](skills/to-illustration/) | 用户 + 模型 | 将文章或概念设计成构图统一、角色一致的铅笔编辑插图、手写批注图与简单解释图 |
+| [to-r2-image](skills/to-r2-image/) | 用户 + 模型 | 压缩图片、发布到 Cloudflare R2，并维护 Markdown 图床 URL 与资产台账 |
+| [to-simple-code](skills/to-simple-code/) | 仅用户 | 证据驱动化简：以对抗审查收敛重复事实、状态、契约和过度设计 |
+| [write-agent-context](skills/write-agent-context/) | 用户 + 模型 | 创建和审查 AGENTS.md/CLAUDE.md 等 agent 上下文文件 |
+| [write-readme](skills/write-readme/) | 用户 + 模型 | 基于项目证据生成/审查 README，含排版、徽章与双语规范 |
