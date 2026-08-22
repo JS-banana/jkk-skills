@@ -1,0 +1,7 @@
+interface:
+  display_name: "Deep Memory"
+  short_description: "Consolidate, prune, and reindex durable memories from recent sessions"
+  default_prompt: "Use $deep-memory to review recent sessions, distill durable memories, and prune stale entries."
+
+policy:
+  allow_implicit_invocation: false

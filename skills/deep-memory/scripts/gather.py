@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""deep-memoir skill 的信号采集器：扫描 ~/.claude/projects/ 下的 memory 与会话记录。
+"""deep-memory skill 的信号采集器：扫描 ~/.claude/projects/ 下的 memory 与会话记录。
 
 用法:
   gather.py --list [--days N]              列出各项目概况，按近期活跃度排序

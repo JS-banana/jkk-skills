@@ -1,17 +1,27 @@
 ---
-name: deep-memoir
-description: >
-  记忆巩固（做梦）：回顾各项目近期会话，沉淀经验、清理过时与冗余记忆、重建索引。
-  当用户说 /deep-memoir、/dream、「做梦」、「整理记忆」、「沉淀经验」时使用；
-  不用于单次会话内的临时总结。
+name: deep-memory
+description: >-
+  Manual-only memory consolidation (做梦): review recent sessions across
+  projects, distill durable memories, prune stale or redundant entries, and
+  rebuild indexes. Use only when the user explicitly invokes $deep-memory
+  (or /deep-memory, /dream, 「做梦」). Do not use for in-session recaps, a
+  single "remember this", ordinary memory lookup, or any request that did
+  not name this skill.
 license: MIT
+disable-model-invocation: true
 ---
 
-# Deep Memoir
+# Deep Memory
 
 像大脑在睡眠中巩固记忆：回顾近期各项目的对话，把值得留下的经验写成持久
 记忆，把过时、重复、已被仓库正典覆盖的清掉。整个流程**报告先行**——
 先给用户看整理报告，确认后才落盘。
+
+## 仅手动触发
+
+仅当用户显式调用本 skill 时进入下方流程。点名方式：`$deep-memory`、
+`/deep-memory`、`/dream`、「做梦」。用户只是提到记忆、整理、总结、沉淀，
+或让你「记一下」某件事，不得自行启动。
 
 ## 硬性规则
 
@@ -40,7 +50,7 @@ AGENTS.md / CLAUDE.md。
 
 据此定范围（范围规则全部在此，别处不再定义）：
 
-- **默认**（用户只说 /deep-memoir）：处理所有近 N 天有会话的项目，N 默认 7。
+- **默认**（用户只说 /deep-memory）：处理所有近 N 天有会话的项目，N 默认 7。
 - **用户带范围时收窄**：「整理当前项目」→ 只处理当前工作目录对应项目；
   「只整理 X」→ 点名项目；「排除 X」「别动公司项目」→ 从默认名单剔除；
   「最近一个月」等时间词 → 换算 `--days`。
