@@ -37,8 +37,6 @@ source diagram into the hero.
 
 - Use semantic HTML/CSS first for paths, gates, ledgers and delivery status.
 - Use Mermaid for exact, versionable topology and keep its source fallback.
-- Use `product-ui-craft` when the report needs a redesign from product
-  truth through experience architecture and art direction.
 - Use `to-illustration` for at most one conceptual explainer. Do not use
   it for strict topology, many nodes, numerical precision or UI screenshots.
 - Add React, Canvas or WebGL only when native HTML/CSS/SVG cannot express the

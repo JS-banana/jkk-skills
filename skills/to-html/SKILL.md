@@ -31,9 +31,9 @@ complete source as the traceable dossier beneath it.
 3. **Perform the design read.** Read
    [references/editorial-grammar.md](references/editorial-grammar.md). State the
    page kind, audience, vibe, narrative axis and the three dials: design
-   variance, motion intensity and visual density. For a redesign, use
-   `product-ui-craft` to move through Product Truth → Experience
-   Architecture → Art Direction before styling.
+   variance, motion intensity and visual density. For a redesign, move
+   through Product Truth → Experience Architecture → Art Direction
+   before styling.
    **Complete when:** the first viewport and primary reading path have a reason
    to exist.
 4. **Build the presentation plan.** Initialize a source-shaped draft:
