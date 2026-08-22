@@ -821,7 +821,7 @@ def verify_url(url: str, expected_content_type: str | None = None, expected_cach
     last_error = ""
     while True:
         try:
-            req = urllib.request.Request(url, method="GET", headers={"User-Agent": "r2-image-host/1.0"})
+            req = urllib.request.Request(url, method="GET", headers={"User-Agent": "to-r2-image/1.0"})
             with urllib.request.urlopen(req, timeout=20) as resp:
                 data = resp.read()
                 headers = dict(resp.headers.items())
@@ -872,7 +872,7 @@ def cmd_smoke(args: argparse.Namespace) -> int:
         source = tmpdir / "smoke.png"
         create_test_png(source)
         optimized = optimize_image(source, tmpdir, quality=int(config["webp_quality"]), max_width=int(config["max_width"]))
-        key = f"_smoke/r2-image-host-{int(time.time())}.{optimized.output_path.suffix.lstrip('.')}"
+        key = f"_smoke/to-r2-image-{int(time.time())}.{optimized.output_path.suffix.lstrip('.')}"
         upload_asset(config, optimized, key)
         url = public_url(config["public_base_url"], key)
         print(f"uploaded: {url}")

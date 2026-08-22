@@ -1,5 +1,5 @@
 ---
-name: r2-image-host
+name: to-r2-image
 description: >
   Asset publishing to Cloudflare R2 for local images and Markdown documents.
   Use when the user wants an R2 image host, upload local images to R2, compress
@@ -9,7 +9,7 @@ description: >
 license: MIT
 ---
 
-# R2 Image Host
+# To R2 Image
 
 Publish local image assets to Cloudflare R2, record the public URL in a
 manifest, and rewrite Markdown so archived content no longer depends on local
