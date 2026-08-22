@@ -66,6 +66,17 @@ Maintain a lightweight route registry:
 
 Merge routes that are substantively identical and redirect capacity toward underexplored mechanisms. A polished reformulation that stops at the same hard premise is not progress.
 
+## Explain the present through time and comparison
+
+For subjects whose current shape may depend on earlier choices, add a historical × current × path-dependence route family to the portfolio. Do not force this route family onto a narrow question where it cannot change the answer.
+
+- **Historical evolution**: establish the starting problem, meaningful turning points, reversals, and constraints. Separate documented chronology from a retrospective story about why the outcome was inevitable.
+- **Current comparison**: compare relevant alternatives on aligned dimensions and the same time slice. Normalize definitions, versions, incentives, resources, evaluation settings, and operating conditions before interpreting a difference.
+- **Path dependence**: trace which earlier choices locked in or opened later options—such as standards, interfaces, data, capital, regulation, or organizational capability. Distinguish a contingent advantage that persisted from a necessary causal constraint, and ask what evidence would show a different branch was viable.
+- **Cross-explanation**: use the historical record to explain present differences, then use current cases and counterexamples to test whether that historical mechanism still matters. Mark documented links, inferences, and disputes separately; do not reduce the result to slogans such as “first mover” or “the market decided.”
+
+Keep the three lenses connected but not interchangeable: chronology supplies candidate mechanisms, comparison tests them against alternatives, and path dependence explains which earlier conditions still constrain the present.
+
 ## Orchestrate independent discovery
 
 Keep discovery routes independent during their first pass:
@@ -103,7 +114,16 @@ Integrate evidence rather than report prose:
 
 Prefer official documentation, original papers, source code, primary datasets, regulations, standards, and first-party statements for consequential facts. Use expert analysis for context. Use community material to discover terminology, cases, failure modes, and counterexample leads, but not as sole proof of generality.
 
-For technical or product research, verify the real chain separately: documentation claims, source capability, build or configuration, runtime behavior, persistence or delivery, and the target user environment. Automated tests, vendor demos, and isolated success cases do not establish universal behavior.
+## Audit research and search sufficiency
+
+Before closing any round or the whole run, audit coverage rather than counting links or search activity:
+
+- The claim map covers the definitions, mechanism or causes, relevant historical transitions, current alternatives or benchmarks, strongest failure or counterexample, and scope conditions. Omit a dimension only with a stated reason.
+- Search uses the vocabulary of the field and its competing explanations, follows important citations back to original sources, and includes a disconfirming route when the claim could change a decision.
+- Every high-impact claim has evidence that directly matches its definition, sample, time, region, version, test setting, and operating conditions. Where possible, pair primary evidence with an independent artifact, case, dataset, or execution; label what remains static or unexecuted.
+- For technical or product research, verify the real chain separately: documentation claims, source capability, build or configuration, runtime behavior, persistence or delivery, and the target user environment. Automated tests, vendor demos, and isolated success cases do not establish universal behavior.
+- Search is not sufficient when results are only snippets or marketing material, all come from one provenance, current claims rely on stale versions, comparisons use incompatible metrics, or a known alternative explanation was never tested.
+- Stop only when the stop conditions below are met. If the remaining gap requires new data, access, experiments, execution, or expertise, record that exact blocker instead of searching indefinitely or filling it with fluent inference.
 
 ## Apply an independent verification gate
 
