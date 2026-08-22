@@ -1,0 +1,7 @@
+interface:
+  display_name: "Find Gap"
+  short_description: "Mine evidence-backed demand signals from real user pain"
+  default_prompt: "Use $find-gap to collect and screen evidence-backed demand signals."
+
+policy:
+  allow_implicit_invocation: false

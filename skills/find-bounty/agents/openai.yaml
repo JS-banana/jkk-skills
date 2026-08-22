@@ -1,0 +1,7 @@
+interface:
+  display_name: "Find Bounty"
+  short_description: "Find and record actionable AI and developer campaign opportunities"
+  default_prompt: "Use $find-bounty to scan for actionable AI and developer campaigns."
+
+policy:
+  allow_implicit_invocation: false

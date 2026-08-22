@@ -1,13 +1,13 @@
 ---
 name: find-gap
-description: >
-  Demand-signal mining for product discovery. Use when the user wants to
-  collect or deep-dig user pain points from Reddit, Xiaohongshu, V2EX, forums,
-  app/marketplace reviews (App Store, Shopify, WordPress, G2), feedback
-  boards, complaints, paid services, or procurement; when screening or
-  reviewing already-collected demand rows; or when preparing and writing
-  demand rows to the Feishu Base through lark-cli.
+description: >-
+  Manual-only demand-signal mining for product discovery: collect, screen, and
+  prepare evidence-backed user pain from communities, reviews, and feedback
+  boards, then write rows to the Feishu Base through lark-cli. Use only when
+  the user explicitly invokes $find-gap. Do not use for idea lists, competitor
+  research, ordinary web search, or any request that did not name this skill.
 license: MIT
+disable-model-invocation: true
 ---
 
 # Find Gap
@@ -16,6 +16,12 @@ Find evidence-backed demand signals. A demand signal is not an idea, product
 list, bug report, feature request, trend, or recommendation. It is a concrete
 person or role, in a concrete scene, stuck on a job, with original evidence of
 pain, workaround, cost, reaction, payment, or repeated demand.
+
+## Manual invocation only
+
+Run this workflow only when the user explicitly invokes this skill. Names:
+`$find-gap`, `/find-gap`. Mentioning pain points, Reddit, Xiaohongshu, or
+“找需求” is not enough.
 
 ## Load Rules
 

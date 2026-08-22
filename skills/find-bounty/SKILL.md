@@ -1,11 +1,13 @@
 ---
 name: find-bounty
-description: >
-  Use when finding, screening, recording, or reminding about AI/vendor developer
-  campaigns: hackathons, challenges, credits, beta incentives, data contests,
-  feedback rewards, content rewards, user-forwarded campaign notices, or Hermes
-  cron AI activity radar scans.
+description: >-
+  Manual-only campaign radar for actionable AI and developer opportunities:
+  hackathons, challenges, credits, beta incentives, data contests, and
+  user-forwarded notices. Use only when the user explicitly invokes
+  $find-bounty. Do not use for AI news, a campaign mentioned in passing, or
+  any request that did not name this skill.
 license: MIT
+disable-model-invocation: true
 ---
 
 # Find Bounty
@@ -13,6 +15,12 @@ license: MIT
 Find actionable AI and developer campaign opportunities. This is not AI news
 monitoring; it only keeps opportunities that a person can enter, claim, submit,
 or register for, with a concrete reward and a direct link.
+
+## Manual invocation only
+
+Run this workflow only when the user explicitly invokes this skill. Names:
+`$find-bounty`, `/find-bounty`. Mentioning a hackathon, credits, or campaign
+in passing is not enough.
 
 ## Load Rules
 

@@ -1,8 +1,15 @@
 ---
 name: to-simple-code
 description: >-
-  对已有代码或本轮改动做证据驱动的化简，识别并收敛重复事实、生命周期状态、废弃兼容路径、推测性抽象和无消费者接口；默认只读审计，明确授权后一次实施一个已证明候选。用于简化代码、回收代码熵、去除过度设计或检查当前改动是否引入不必要复杂度；不用于普通功能开发、格式整理或性能与安全审计。
+  Manual-only evidence-driven simplification of existing code or the current
+  diff: find and collapse duplicated facts, lifecycle state, dead compatibility
+  paths, speculative abstractions, and unused surfaces. Default is a read-only
+  audit; apply one proven candidate only after explicit authorization. Use only
+  when the user explicitly invokes $to-simple-code. Do not use for ordinary
+  feature work, formatting, performance or security audits, or any request that
+  did not name this skill.
 license: MIT
+disable-model-invocation: true
 ---
 
 # To Simple Code
@@ -10,6 +17,12 @@ license: MIT
 把代码变简单，不是追求更少的行，而是减少团队必须长期保持一致的事实、状态、契约、路径和概念。静态工具只能提出候选；当前消费者、所有权、历史、运行证据、兼容义务和可证伪验证共同决定能否收敛。
 
 跟随用户的语言交付。没有安全可做的化简是有效结论，不要为了完成任务强行寻找可删项。
+
+## 仅手动触发
+
+仅当用户显式调用本 skill 时进入下方流程。点名方式：`$to-simple-code`、
+`/to-simple-code`。用户只是提到简化、重构、清理、过度设计，或让你看看
+当前 diff 是否太复杂，不得自行启动。
 
 ## 1. 确认模式与范围
 
