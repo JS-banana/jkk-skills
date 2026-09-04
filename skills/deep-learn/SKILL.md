@@ -8,14 +8,14 @@ disable-model-invocation: true
 
 # Deep Learn
 
-Turn an unfamiliar subject into a knowledge model the user can explain, test, apply, and extend. Do not measure completion by source count or agent consensus. Finish when the core questions have reliable answers, the evidence boundaries are explicit, and the resulting understanding transfers to new situations.
+Turn an unfamiliar subject into an evidence-backed, human-readable knowledge model the user can explain, test, apply, and extend. Do not measure completion by source count or agent consensus. Finish when the core questions have reliable answers, the evidence boundaries are explicit, and the resulting understanding transfers to new situations.
 
 Follow the user's language for interaction and the final deliverable. Keep research instructions, route contracts, evidence states, and technical identifiers precise even when the user works in another language.
 
 ## Preserve the boundary
 
 - Handle learning, research, evidence verification, cognitive modeling, and unknown management.
-- Do not draft the article, choose its position, design its narrative, or publish it. Downstream work may use the adjudicated knowledge pack, not unreviewed intermediate reports.
+- Design the knowledge pack's own explanatory order so a human can learn from it. Do not draft a downstream article, choose its position or title, design its editorial narrative, or publish it. Downstream work may use the adjudicated knowledge pack, not unreviewed intermediate reports.
 - Do not treat one agent's search summary as deep research or several agents repeating the same source as independent confirmation.
 - Work read-only by default. Unless the user explicitly requests persistence, deliver in the conversation. When a host project specifies a destination, write only the final knowledge pack and do not persist subagent reports.
 
@@ -35,10 +35,12 @@ Keep the user's experience and intuitions as motivations or observations to test
 
 ## Select the research intensity
 
-- Use **focused research** when the question is narrow, authoritative sources are concentrated, and there are no independent evidence mechanisms. The lead agent completes the full evidence loop.
+- Use **focused research** when the question is narrow, authoritative sources are concentrated, and there are no independent evidence mechanisms. Focused narrows the scope; it does not imply short or shallow work. Unless the user explicitly asks for a quick or brief pass, assume the default high-investment evidence loop and reader pass. The lead agent completes the full evidence loop.
 - Use **portfolio deep research** when the subject is unfamiliar, spans multiple mechanisms, depends on real cases, contains source conflict, or the user explicitly requests systematic multi-angle or subagent research. Prefer this mode when at least two high-value routes can advance independently.
 
-Do not start subagents to simulate effort. When the host cannot use subagents, execute the routes sequentially and state that the exploration was not independently parallelized.
+Research may branch across routes, but understanding must converge in one integrated model and one canonical knowledge pack. Route or subagent order is a research operation, not the structure of the final reading experience.
+
+Do not start subagents to simulate effort. When the host cannot use subagents, execute the routes sequentially. Record the lack of independent discovery only when the learning contract or a high-impact claim depended on that independence; do not expose orchestration trivia merely to prove that work happened.
 
 ## Design the research portfolio
 
@@ -139,39 +141,34 @@ For medical, legal, financial, safety-critical, or publishable academic conclusi
 
 ## Build transferable understanding
 
-Do not stop at source summaries. Build a cognitive ladder around each central concept:
+Do not stop at source summaries. Use the cognitive ladder as an internal coverage gate for each central concept, not as a fixed seven-part output template. The integrated model should cover, as applicable:
 
-1. **Definition**: what it is and how it differs from adjacent concepts;
-2. **Motivation**: what problem requires it;
-3. **Mechanism**: how inputs, process, outputs, and constraints connect;
-4. **Example**: how a real case exhibits the mechanism;
-5. **Counterexample**: where the intuitive explanation fails;
-6. **Transfer**: how the model predicts or explains a new situation not copied from a source;
-7. **Boundary**: what remains conditional, disputed, or dependent on expert judgment.
+- **Definition**: what it is and how it differs from adjacent concepts;
+- **Motivation**: what problem requires it;
+- **Mechanism**: how inputs, process, outputs, and constraints connect;
+- **Example**: how a real case exhibits the mechanism;
+- **Counterexample**: where the intuitive explanation fails;
+- **Transfer**: how the model predicts or explains a new situation not copied from a source;
+- **Boundary**: what remains conditional, disputed, or dependent on expert judgment.
 
-If the model cannot explain the mechanism, predict a new case, or name its failure conditions, return to the evidence loop instead of polishing the prose.
+Let the topic determine how these pieces are introduced and combined. Do not expose the ladder as mandatory headings or use route order as the explanation order. If the model cannot explain the mechanism, predict a new case, or name its failure conditions, return to the evidence loop instead of polishing the prose.
 
-## Deliver one knowledge pack
+## Route the knowledge delivery
 
-Return one self-contained Markdown knowledge pack. Let the question determine its section order, but always include:
+When preparing the final pack or checking its quality, read [references/knowledge-pack.md](references/knowledge-pack.md). Infer the delivery profile from the learning contract; do not ask the user to choose one unless the ambiguity would materially change the work:
 
-- the learning contract;
-- a scoped answer to the core question;
-- the concept model or dependency ladder;
-- consequential claims, evidence, and adjudication state;
-- real cases, failures, counterexamples, and applicability limits;
-- explicit separation of fact, inference, user observation, dispute, and unknown;
-- what was actually reopened, inspected, executed, or left unverified;
-- a source ledger;
-- the remaining high-value questions and exact next actions.
+- **Study Reference** supports learning and upstream writing with a transferable concept model, evidence boundaries, and reusable vocabulary without deciding an article's stance, title, or editorial narrative.
+- **Decision Dossier** supports selection or product judgment with aligned options, criteria, conditions, trade-offs, failure modes, and decision-relevant unknowns without making an unsupported choice for the user.
 
-Place clickable citations next to facts, data, quotations, and dated claims. In the source ledger record source class, title, publication date, access date, original URL, supported claim, and known limitation.
+The reference defines how either profile becomes one human-readable canonical Markdown pack, including its compact audit appendix and the Evidence Gate and Reader Gate. It complements this file's research core; it does not replace the learning contract, independent discovery, claim-evidence loop, search sufficiency, or verification requirements above.
 
-Respect an upstream project's required path and format, but keep the knowledge pack independent of personal profiles and private project context. Do not retain route reports, chat transcripts, or rejected conclusions as parallel sources of truth.
+## Deliver one canonical knowledge pack
+
+Return or write exactly one self-contained Markdown knowledge pack as the canonical source. Follow the body, appendix, citation, and reader-quality rules in [references/knowledge-pack.md](references/knowledge-pack.md). Respect an upstream project's required destination and format, but keep the pack independent of personal profiles and private project context. Do not retain route reports, chat transcripts, or rejected conclusions as parallel sources of truth, and do not turn the pack into a downstream article.
 
 ## Stop on evidence, not activity
 
-Do not use fixed source, agent, round, or word counts as quality targets. Stop when all of these are true:
+Do not use fixed source, agent, round, word, section, or citation counts as quality targets. Stop only when the Evidence Gate and Reader Gate in [references/knowledge-pack.md](references/knowledge-pack.md) both pass, and all of these are true:
 
 - the core question has a scoped answer, or the exact reason it cannot yet be answered is established;
 - the central concepts can be explained, distinguished, and transferred to a new case;
@@ -181,4 +178,4 @@ Do not use fixed source, agent, round, or word counts as quality targets. Stop w
 - another round would add repeated material without changing the knowledge model;
 - remaining gaps require new data, experiments, access, or expertise rather than more language inference.
 
-End by distinguishing what this run confirmed, inferred, disputed, and did not verify, followed by the user's highest-value next action.
+End with the minimum useful closure: what matters for the user's purpose and, when one exists, the highest-value next action. Keep confirmed, inferred, disputed, and unverified states available in the pack's audit appendix without mechanically repeating the entire classification in the conclusion.
