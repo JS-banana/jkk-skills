@@ -1,0 +1,26 @@
+{
+  "name": "@jkk/article-visuals",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic, recipe-driven image assets for article publishing",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "visual-assets": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test test/core.test.mjs",
+    "smoke": "npm run build && node dist/cli.js capabilities --json"
+  },
+  "dependencies": {
+    "sharp": "0.35.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2"
+  }
+}
