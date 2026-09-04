@@ -1,7 +1,0 @@
-interface:
-  display_name: "To Simple Code"
-  short_description: "Evidence-driven simplification that collapses duplicated facts and speculative structure"
-  default_prompt: "Use $to-simple-code to audit this code or diff for safe simplifications."
-
-policy:
-  allow_implicit_invocation: false
