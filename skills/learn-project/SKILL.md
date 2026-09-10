@@ -1,14 +1,15 @@
 ---
 name: learn-project
 description: >-
-  Understand an unfamiliar software project from its documentation, examples,
-  configuration, and source: explain its purpose and architecture, find useful
-  reading paths, and investigate core mechanisms and design choices as questions
-  deepen. Deliver substantial studies as browser-readable HTML with a traceable
-  Markdown export. Use for project orientation, implementation learning, and follow-up
-  exploration of a repository or local project. This is a learning workflow,
-  not an implementation task or a general code review.
+  Manual-only workflow for understanding an unfamiliar software project from its
+  documentation, examples, configuration, and source: explain its purpose and
+  architecture, find useful reading paths, and investigate core mechanisms and
+  design choices as questions deepen. Deliver substantial studies as
+  browser-readable HTML with a traceable Markdown export. Use only when the user
+  explicitly invokes $learn-project. Do not use for implementation tasks, general
+  code review, or any request that did not name this skill.
 license: MIT
+disable-model-invocation: true
 ---
 
 # Learn Project
@@ -20,6 +21,12 @@ when useful, to ideas they can apply elsewhere. Follow the user's language.
 Keep the central explanation precise: a passing validator proves only the
 properties it checks. Schema validity, matching hashes, or an existing source
 reference do not by themselves prove that a summary or architecture is true.
+
+## Manual invocation only
+
+Run this workflow only when the user explicitly invokes this skill. Names:
+`$learn-project`, `/learn-project`. Asking to explain a repo, read the codebase,
+or understand a project in passing is not enough.
 
 ## Start at the depth the user needs
 

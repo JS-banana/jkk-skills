@@ -1,0 +1,7 @@
+interface:
+  display_name: "Learn Project"
+  short_description: "Build a usable understanding of an unfamiliar software project"
+  default_prompt: "Use $learn-project to study this project and explain its architecture and core mechanisms."
+
+policy:
+  allow_implicit_invocation: false

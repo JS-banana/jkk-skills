@@ -31,7 +31,7 @@ Copilot 等均可使用。
 
 | 技能 | 触发 | 功能 |
 |------|------|------|
-| [learn-project](skills/learn-project/) | 模型 | 理解陌生项目：建立整体认识、按需深入核心实现，以自有交互阅读页串联总览、功能流程、实现原理与源码依据 |
+| [learn-project](skills/learn-project/) | 仅用户 | 理解陌生项目：建立整体认识、按需深入核心实现，以自有交互阅读页串联总览、功能流程、实现原理与源码依据 |
 | [deep-learn](skills/deep-learn/) | 仅用户 | 深度研究：多路线独立探索、一手证据与对抗验证，产出可迁移的知识模型 |
 | [deep-analysis](skills/deep-analysis/) | 模型 | 有边界的证据分析：默认检索、可选横纵镜头，并给出带限制的暂定判断 |
 | [deep-memory](skills/deep-memory/) | 仅用户 | 记忆巩固：扫描各项目会话记录与 memory，报告先行地沉淀、合并、清理长期记忆 |
