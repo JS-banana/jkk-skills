@@ -1,0 +1,547 @@
+{
+  "version": 1,
+  "project": {
+    "name": "Archify",
+    "url": "https://github.com/tt-a1i/archify",
+    "revision": "5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70",
+    "language": "zh-CN",
+    "scope": "固定提交 5769ace 的源码研究。重点核对编写约定、共享加载器、来源验证和单文件交付；本次没有执行 Archify 的上游测试，也没有覆盖所有布局算法和浏览器功能。页面交互测试属于 learn-project 阅读器的验证，不是原项目运行验收。"
+  },
+  "title": "从架构图，读到实现背后的原理",
+  "summary": "Archify 的架构判断主要由使用它的 Agent 完成。程序接收已经写好的描述，负责验证、渲染与交付。值得学习的是它怎样把“理解”变成可检查的表达，以及如何明确区分描述、来源和产物三者。",
+  "overview": {
+    "body": [
+      "先抓住职责分工：Agent 阅读项目材料并编写结构描述；Archify 让这份描述符合契约，变成可探索的页面。图中关系是否准确，仍要回到调用者、装配代码、状态和条件核对。下面从这条主线，继续拆开三个具体问题。"
+    ],
+    "nodes": [
+      {
+        "id": "agent",
+        "title": "Agent 理解项目",
+        "summary": "阅读入口与核心行为，决定要表达的职责和关系。",
+        "mechanism": "understanding",
+        "evidence": [
+          "author-contract"
+        ]
+      },
+      {
+        "id": "spec",
+        "title": "结构描述与来源",
+        "summary": "用有类型的 JSON 表达节点、关系及可选源码引用。",
+        "mechanism": "evidence-boundary",
+        "evidence": [
+          "author-path",
+          "loader"
+        ]
+      },
+      {
+        "id": "renderer",
+        "title": "加载、验证、渲染",
+        "summary": "消费描述，检查约定，生成候选页面。",
+        "mechanism": "evidence-boundary",
+        "evidence": [
+          "loader"
+        ]
+      },
+      {
+        "id": "delivery",
+        "title": "检查后交付",
+        "summary": "候选通过检查后替换目标，得到可浏览的 HTML。",
+        "mechanism": "safe-delivery",
+        "evidence": [
+          "render-check",
+          "commit"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "from": "agent",
+        "to": "spec",
+        "label": "将理解写成 JSON"
+      },
+      {
+        "from": "spec",
+        "to": "renderer",
+        "label": "加载描述与可选来源"
+      },
+      {
+        "from": "renderer",
+        "to": "delivery",
+        "label": "交付候选 HTML"
+      }
+    ]
+  },
+  "mechanisms": [
+    {
+      "id": "understanding",
+      "title": "架构是怎样被判断出来的？",
+      "question": "精华是一套提示词、代码库查询工具，还是另一种机制？",
+      "answer": "这条链路把理解仓库交给宿主 Agent。Skill 给出编写约定和来源要求，JSON 让理解显式化，程序再检查它能够检查的属性。沿已核对的入口，没有看到一个自动遍历代码库并推导架构的分析引擎。",
+      "steps": [
+        {
+          "id": "investigate",
+          "title": "先核对实际职责与行为",
+          "body": [
+            "当图必须反映真实代码时，编写约定要求检查仓库入口、运行边界、存储、传输和部署配置。这个要求由 Agent 执行：它利用当时可用的文件与搜索能力读源码，再作出判断。",
+            "因此，不能把 Archify 的效果理解为某个隐藏的代码库检索器自动“读透了项目”。在已检查的实现链路中，仓库理解仍依赖 Agent 的阅读深度与推理质量。"
+          ],
+          "input": "用户问题与指定项目材料",
+          "output": "一份有来源支持的职责与关系解释",
+          "branches": [
+            {
+              "condition": "解释能够回到具体来源",
+              "effect": "把要表达的部分写入结构描述。",
+              "target": "author"
+            }
+          ],
+          "evidence": [
+            "author-contract"
+          ]
+        },
+        {
+          "id": "author",
+          "title": "把理解变成可检查的描述",
+          "body": [
+            "Agent 根据问题选择架构、流程或时序等图类型，再读相应 schema 与示例、编写自己的 JSON。节点与连线是作者提供的语义数据；示例提供字段形状，不应提供另一个项目的事实。",
+            "这一步的价值是暴露解释中的空白：谁调用谁、连线是什么含义、引用在哪里，都需要被写清楚。但把字段填满，并不能补上没有读到的装配或调用关系。"
+          ],
+          "input": "已形成的理解",
+          "output": "有明确节点、关系和来源的 JSON",
+          "branches": [
+            {
+              "condition": "描述完成",
+              "effect": "进入加载器和确定性检查。",
+              "target": "check"
+            }
+          ],
+          "evidence": [
+            "author-path"
+          ]
+        },
+        {
+          "id": "check",
+          "title": "分清程序检查与理解正确",
+          "body": [
+            "loadDiagram 读取 JSON 后调用 schema、关系、工程约束和来源检查，再返回描述与模板给渲染流程。这里没有以原仓库为输入、自动产出组件与调用边的过程。",
+            "对我们的学习 Skill，更适合借鉴的是“先解释行为，再用表达暴露缺口”。比如学习插件加载，必须从发现、注册和选择追到真正调用；仅把几个 plugin 目录画在一起，仍没有解释核心机制。"
+          ],
+          "input": "编写完成的描述",
+          "output": "通过所启用检查的描述及展示所需信息",
+          "evidence": [
+            "loader"
+          ]
+        }
+      ],
+      "principle": [
+        "Archify 把开放式推理和确定性生产分开：Agent 决定语义，程序约束表达与交付。这使产物可以稳定生成，但也清楚暴露了研究质量仍由谁负责。",
+        "learn-project 应把工夫放在可连续解释的代表性行为链路上：明确入口、装配、数据变换、状态归属和重要分支，再让读者沿同一条链路进入源码。这个学习方法是我们的设计提炼，不是声称 Archify 已经提供的研究算法。"
+      ],
+      "limits": [
+        "不能直接照搬图表编写时的节点数量和首屏布局要求，来限制源码学习深度。快速了解时保持选择性；用户追问机制时，沿关键连接补读，而不是只扩充图上的节点。",
+        "本页依据固定版本的编写与渲染链路作出判断，没有把“未看到内部查询器”扩大为对所有宿主 Agent 工具的否定。"
+      ],
+      "evidence": [
+        "author-contract",
+        "loader"
+      ]
+    },
+    {
+      "id": "evidence-boundary",
+      "title": "引用核验究竟证明了什么？",
+      "question": "源码链接真实存在，是否意味着这幅架构图就是对的？",
+      "answer": "来源验证证明的是能定位到指定版本中的文件和行段。它没有证明作者对该段源码的解释，也没有证明组件之间发生了图上描述的调用。一个职责写错的节点，仍可能引用真实存在的文件并通过这些检查。",
+      "steps": [
+        {
+          "id": "gate",
+          "title": "先判断是否声明了来源",
+          "body": [
+            "来源验证是可选路径：当前版本针对 architecture 图。没有声明仓库或组件来源时，验证函数返回 null；不能把普通图表生成成功描述成源码已经核对。"
+          ],
+          "input": "diagramType、meta.repository 与 component.sources",
+          "output": "是否进入仓库来源检查",
+          "branches": [
+            {
+              "condition": "未声明仓库来源",
+              "effect": "不执行这组来源验证，返回 null。"
+            },
+            {
+              "condition": "声明了 architecture 来源",
+              "effect": "继续核对仓库和提交。",
+              "target": "repository"
+            }
+          ],
+          "evidence": [
+            "evidence-gate"
+          ]
+        },
+        {
+          "id": "repository",
+          "title": "固定仓库身份与版本",
+          "body": [
+            "验证器要求完整提交 SHA 与公共 GitHub 仓库地址，核对本地目录是否为 Git 顶层、origin 是否匹配，再检查该提交是否在本地存在。",
+            "这避免“链接指向 A 项目、实际拿 B 项目验证”或版本漂移造成的误配。它仍不审查作者写下的职责描述。"
+          ],
+          "input": "仓库元数据与 --repo-root",
+          "output": "可读取且身份匹配的固定提交",
+          "branches": [
+            {
+              "condition": "仓库或提交不匹配",
+              "effect": "报告相应来源诊断，无法继续成功渲染。"
+            },
+            {
+              "condition": "仓库与版本满足约束",
+              "effect": "检查具体文件与行段。",
+              "target": "location"
+            }
+          ],
+          "evidence": [
+            "evidence-repo"
+          ]
+        },
+        {
+          "id": "location",
+          "title": "检查文件和行段，生成链接",
+          "body": [
+            "验证器按 revision:path 检查对象是否为文件 blob；有指定行号时读取文件，检查行段是否越界，随后生成固定版本的 URL。",
+            "可以用一个反例检验边界：引用一个真实函数，却把“注册回调”解释成“立即执行回调”。文件和行号都可能合法，解释依旧是错的。要判断语义，必须继续看调用位置、触发条件和回调真正执行的路径。"
+          ],
+          "input": "作者填写的源码路径与可选行号",
+          "output": "节点对应的来源链接",
+          "branches": [
+            {
+              "condition": "文件不存在或行段越界",
+              "effect": "报告来源错误。"
+            },
+            {
+              "condition": "定位检查通过",
+              "effect": "生成可追溯的链接；语义仍由源码阅读核对。"
+            }
+          ],
+          "evidence": [
+            "evidence-blob",
+            "evidence-lines"
+          ]
+        }
+      ],
+      "principle": [
+        "把“能回到哪里”与“那段代码说明什么”分开。来源坐标解决可追溯性；调用与条件的解释解决理解问题。我们的阅读器把摘录和支持的判断放在同一个展开区，便于人直接核对这两层是否匹配。"
+      ],
+      "limits": [
+        "本页的“源码已阅读”“测试已阅读”是研究者记录的证据类别，不是渲染器颁发的认证。测试被阅读，也不等于测试在当前环境实际通过。"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "safe-delivery",
+      "title": "生成失败，旧结果为什么还在？",
+      "question": "已有 report.html，更新时渲染或检查失败，会发生什么？",
+      "answer": "commandDeliver 先固定本次输入，在目标目录旁准备候选文件，渲染和检查都面向候选。准备好回执并再次检查路径后才执行 rename；关键在于旧结果直到提交边界之前都没有被替换。",
+      "steps": [
+        {
+          "id": "freeze",
+          "title": "固定本次输入",
+          "body": [
+            "程序先读取一次输入字节，再把它们写成 specification.snapshot.json。后续渲染使用这份快照，回执输入摘要也使用最初读取的字节。这样避免任务中途原文件改变，导致“实际渲染的内容”和“记录的输入”错配。"
+          ],
+          "input": "diagram.json 的一次读取结果",
+          "output": "本次生成专用的 JSON 快照",
+          "state": "原文件没有被持续锁住；一致性范围是本次任务内部。",
+          "branches": [
+            {
+              "condition": "读取、解析或快照写入失败",
+              "effect": "报告输入或准备阶段错误，不替换旧产物。"
+            },
+            {
+              "condition": "快照就绪",
+              "effect": "在候选位置执行渲染与检查。",
+              "target": "candidate"
+            }
+          ],
+          "evidence": [
+            "freeze",
+            "snapshot"
+          ]
+        },
+        {
+          "id": "candidate",
+          "title": "让失败留在候选阶段",
+          "body": [
+            "临时目录创建在输出文件的父目录中，注释说明这是为了同一文件系统中的最终重命名。渲染器读取快照并写 candidatePath；检查器也只检查这个候选文件。",
+            "渲染或最终检查失败时，程序报告相应阶段并返回，尚未走到 rename。不能在这种失败后打开旧目标，看到页面正常就说本次生成成功，因为看到的可能仍是上一次产物。"
+          ],
+          "input": "固定的描述快照",
+          "output": "候选 HTML 与检查结果",
+          "state": "旧 report.html 保留；新内容由 stagingDirectory 持有。",
+          "branches": [
+            {
+              "condition": "渲染或最终检查失败",
+              "effect": "返回失败，旧目标保留；退出时进入清理。",
+              "target": "cleanup"
+            },
+            {
+              "condition": "渲染及检查通过",
+              "effect": "准备回执并进入最终替换。",
+              "target": "commit"
+            }
+          ],
+          "evidence": [
+            "staging",
+            "render-check",
+            "failure-test"
+          ]
+        },
+        {
+          "id": "commit",
+          "title": "在明确的一行替换目标",
+          "body": [
+            "检查通过后仍需准备回执、读取候选字节、计算摘要，并再次核对输出路径约束。随后 fs.renameSync(candidatePath, outputPath) 才让候选成为目标。",
+            "成功反馈在重命名之后输出；因此“候选生成了”与“新产物已交付”是两个不同的事实。摘要记录内容对应关系，不负责验证文中架构描述是否正确。"
+          ],
+          "input": "已通过检查的候选与准备好的回执",
+          "output": "替换后的 report.html；随后输出交付结果",
+          "state": "rename 是单个输出路径的替换边界。",
+          "branches": [
+            {
+              "condition": "路径检查或 rename 失败",
+              "effect": "报告 commit 阶段错误；没有成功回执。",
+              "target": "cleanup"
+            },
+            {
+              "condition": "rename 成功",
+              "effect": "新页面成为目标，随后反馈交付结果并清理。",
+              "target": "cleanup"
+            }
+          ],
+          "evidence": [
+            "receipt",
+            "commit"
+          ]
+        },
+        {
+          "id": "cleanup",
+          "title": "用退出路径检验解释",
+          "body": [
+            "finally 尝试删除临时目录，失败则发出警告。测试中会故意制造产物检查错误，断言旧文件字节不变、失败阶段正确，并且候选目录已移除。",
+            "这些失败断言帮助我们反向检查解释：如果在最终检查前就写了旧目标，旧文件不变的预期就无法成立。本页读取了这些测试，没有在这轮执行上游测试。"
+          ],
+          "output": "临时目录被尝试清理；失败时保留清理警告",
+          "branches": [
+            {
+              "condition": "清理失败",
+              "effect": "发出警告；不能据此推断已经成功替换的目标被回滚。"
+            }
+          ],
+          "evidence": [
+            "cleanup",
+            "failure-test"
+          ]
+        }
+      ],
+      "principle": [
+        "可以迁移到报告生成、配置导出等单文件产物场景：固定输入，先生成可检查的候选，把替换集中到明确边界，成功反馈放在真正提交之后。代价是临时空间和额外检查时间。",
+        "检查器必须覆盖你真正关心的失败。只检查 HTML 结构，无法替代对文章事实或架构语义的核对。"
+      ],
+      "limits": [
+        "这段实现本身没有建立断电后的持久性保证、多文件事务或多个并发写入者之间的协调；复制这段流程并不能自动获得这些能力。",
+        "文件已经替换、进程尚未输出回执时仍可能发生中断。因此“看到成功消息”与“文件已经提交”不是一个原子操作。"
+      ],
+      "evidence": []
+    }
+  ],
+  "evidence": [
+    {
+      "id": "author-contract",
+      "label": "要求编写者先检查仓库",
+      "kind": "docs",
+      "path": "archify/references/authoring-contract.md",
+      "lines": [
+        179,
+        187
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/references/authoring-contract.md#L179-L187",
+      "supports": "编写约定要求 Agent 在画真实项目之前检查入口、运行边界与配置，并禁止从文件邻近或命名推断运行因果。这是对编写者的要求，不是自动执行的代码分析器。",
+      "excerpt": "## Repository evidence\n\nWhen an architecture diagram must reflect real code, inspect repository\nentrypoints, runtime boundaries, storage, transports, and deployment\nconfiguration before authoring. Record only evidence you actually verified.\n`--repo-root <path>` is architecture-only and is accepted by architecture\n`render`, `validate`, `deliver`, `preview`, and `compare`; workflow, sequence,\ndataflow, and lifecycle reject it. Never infer runtime causality from file\nproximity or naming alone."
+    },
+    {
+      "id": "author-path",
+      "label": "Skill 的编写流程",
+      "kind": "docs",
+      "path": "archify/SKILL.md",
+      "lines": [
+        13,
+        35
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/SKILL.md#L13-L35",
+      "supports": "快速路径指导 Agent 选图类型、阅读 schema 与示例、编写 JSON、按诊断修正和交付。它主要约束图表编写与产物质量，没有在这里定义一套能保证读透项目的仓库研究算法。"
+    },
+    {
+      "id": "loader",
+      "label": "加载器实际消费什么",
+      "kind": "implementation",
+      "path": "archify/renderers/shared/cli.mjs",
+      "lines": [
+        19,
+        27
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/renderers/shared/cli.mjs#L19-L27",
+      "supports": "loadDiagram 从传入文件读取已经编写好的 JSON，依次调用结构、关系和证据检查。这里的输入是描述，不是等待自动推断架构的代码库。",
+      "excerpt": "export function loadDiagram({ rendererDir, diagramType, defaultExample, argv = process.argv }) {\n  const skillRoot = path.resolve(rendererDir, '../..');\n  const inputPath = path.resolve(argv[2] || path.join(skillRoot, 'examples', defaultExample));\n  const diagram = JSON.parse(fs.readFileSync(inputPath, 'utf8'));\n  validateSchema(diagramType, diagram);\n  validateGuidedViews(diagramType, diagram);\n  validateRelationshipIds(diagramType, diagram);\n  validateEngineeringProfile(diagramType, diagram);\n  const sourceEvidence = verifyRepositoryEvidence(diagramType, diagram, process.env.ARCHIFY_REPO_ROOT);"
+    },
+    {
+      "id": "evidence-gate",
+      "label": "来源检查何时进入",
+      "kind": "implementation",
+      "path": "archify/renderers/shared/repository-evidence.mjs",
+      "lines": [
+        81,
+        88
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/renderers/shared/repository-evidence.mjs#L81-L88",
+      "supports": "先判断是否为 architecture 且声明了仓库元数据或组件来源；没有声明来源时返回 null。这段边界来自当前固定版本。",
+      "excerpt": "export function hasRepositoryEvidence(diagramType, diagram) {\n  if (diagramType !== 'architecture') return false;\n  const components = Array.isArray(diagram?.components) ? diagram.components : [];\n  return Boolean(diagram?.meta?.repository) || components.some((component) => Array.isArray(component?.sources) && component.sources.length);\n}\n\nexport function verifyRepositoryEvidence(diagramType, diagram, repoRootInput) {\n  if (!hasRepositoryEvidence(diagramType, diagram)) return null;"
+    },
+    {
+      "id": "evidence-repo",
+      "label": "仓库与提交的核对",
+      "kind": "implementation",
+      "path": "archify/renderers/shared/repository-evidence.mjs",
+      "lines": [
+        136,
+        159
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/renderers/shared/repository-evidence.mjs#L136-L159",
+      "supports": "核对 Git 顶层目录、origin 与声明仓库一致，并检查固定提交是否在本地存在。完整 SHA 的检查在前面的 98 行附近。"
+    },
+    {
+      "id": "evidence-blob",
+      "label": "固定提交中的文件对象",
+      "kind": "implementation",
+      "path": "archify/renderers/shared/repository-evidence.mjs",
+      "lines": [
+        183,
+        192
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/renderers/shared/repository-evidence.mjs#L183-L192",
+      "supports": "按固定提交和作者填写的路径构造 Git 对象，要求对象类型为 blob。检查的对象是来源是否存在，组件职责仍然来自作者。",
+      "excerpt": "          supportedFixes: ['use an end_line greater than or equal to line'],\n        });\n      }\n      const object = `${revision}:${source.path}`;\n      const type = runGit(realRoot, ['cat-file', '-t', object]);\n      if (type.status !== 0 || type.stdout.trim() !== 'blob') {\n        evidenceFailure('repository-evidence/file-missing', `${where} does not identify a file at revision ${revision}.`, {\n          subject: { path: where, componentId: component.id },\n          evidence: { sourcePath: source.path, revision },\n          supportedFixes: ['use a file path that exists at the pinned revision'],"
+    },
+    {
+      "id": "evidence-lines",
+      "label": "行号边界与链接",
+      "kind": "implementation",
+      "path": "archify/renderers/shared/repository-evidence.mjs",
+      "lines": [
+        193,
+        210
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/renderers/shared/repository-evidence.mjs#L193-L210",
+      "supports": "有指定行号时读取 blob、比较行数；通过后生成来源链接。函数没有分析这几行能否支持组件语义或运行关系。"
+    },
+    {
+      "id": "freeze",
+      "label": "一次读取输入",
+      "kind": "implementation",
+      "path": "archify/bin/archify.mjs",
+      "lines": [
+        773,
+        779
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/bin/archify.mjs#L773-L779",
+      "supports": "读入 specification 字节并解析 diagram；后续快照与输入摘要使用这份字节。原文件没有因此被持续锁定。",
+      "excerpt": "  let specification;\n  let diagram;\n  try {\n    specification = fs.readFileSync(inputPath);\n    diagram = JSON.parse(specification.toString('utf8'));\n  } catch (error) {\n    const repair = inputDiagnostic(error, inputPath);"
+    },
+    {
+      "id": "staging",
+      "label": "候选位置与同文件系统",
+      "kind": "implementation",
+      "path": "archify/bin/archify.mjs",
+      "lines": [
+        844,
+        850
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/bin/archify.mjs#L844-L850",
+      "supports": "注释明确说明候选放在目标旁边，是为了让最后 rename 发生在同一文件系统；旧结果在候选阶段保留。",
+      "excerpt": "\n  // Keep the candidate beside the target so the final rename is one\n  // same-filesystem commit. A render or artifact-check failure never touches\n  // an existing trusted output.\n  let stagingDirectory;\n  try {\n    stagingDirectory = fs.mkdtempSync(path.join(outputDirectory, '.archify-delivery-'));"
+    },
+    {
+      "id": "snapshot",
+      "label": "把本次输入写成快照",
+      "kind": "implementation",
+      "path": "archify/bin/archify.mjs",
+      "lines": [
+        870,
+        876
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/bin/archify.mjs#L870-L876",
+      "supports": "把最初读取的字节写到私有候选目录中的 specification.snapshot.json；渲染子进程稍后读此路径。",
+      "excerpt": "  const candidatePath = path.join(stagingDirectory, path.basename(outputPath));\n  const specificationSnapshotPath = path.join(stagingDirectory, 'specification.snapshot.json');\n\n  try {\n    try {\n      fs.writeFileSync(specificationSnapshotPath, specification, { flag: 'wx' });\n    } catch (error) {"
+    },
+    {
+      "id": "render-check",
+      "label": "渲染与检查的失败返回",
+      "kind": "implementation",
+      "path": "archify/bin/archify.mjs",
+      "lines": [
+        896,
+        937
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/bin/archify.mjs#L896-L937",
+      "supports": "渲染读取快照并写候选；render.status 或 check.status 非零均报告对应阶段后返回，尚未执行最终替换。"
+    },
+    {
+      "id": "receipt",
+      "label": "输入与产物的摘要",
+      "kind": "implementation",
+      "path": "archify/bin/archify.mjs",
+      "lines": [
+        1004,
+        1018
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/bin/archify.mjs#L1004-L1018",
+      "supports": "回执中的输入摘要来自 specification，产物摘要来自候选文件字节。摘要建立输入和结果的对应记录，不证明架构描述正确。"
+    },
+    {
+      "id": "commit",
+      "label": "最终替换的那一行",
+      "kind": "implementation",
+      "path": "archify/bin/archify.mjs",
+      "lines": [
+        1065,
+        1073
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/bin/archify.mjs#L1065-L1073",
+      "supports": "执行 fs.renameSync(candidatePath, outputPath) 是候选成为目标的提交边界；失败报告 commit 阶段。",
+      "excerpt": "    try {\n      fs.renameSync(candidatePath, outputPath);\n    } catch (error) {\n      const message = `Could not commit verified delivery \"${outputPath}\": ${error.message}`;\n      reportDeliveryFailure({\n        json,\n        stage: 'commit',\n        type,\n        input: inputPath,"
+    },
+    {
+      "id": "cleanup",
+      "label": "清理候选目录",
+      "kind": "implementation",
+      "path": "archify/bin/archify.mjs",
+      "lines": [
+        1114,
+        1121
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/bin/archify.mjs#L1114-L1121",
+      "supports": "finally 尝试移除临时目录；清理失败输出警告。清理与提交成功反馈不是一个整体事务。",
+      "excerpt": "  } finally {\n    try {\n      fs.rmSync(stagingDirectory, { recursive: true, force: true });\n    } catch (error) {\n      console.error(`Warning: could not remove delivery staging directory \"${stagingDirectory}\": ${error.message}`);\n    }\n  }\n}"
+    },
+    {
+      "id": "failure-test",
+      "label": "反向核对：失败时旧结果不变",
+      "kind": "test",
+      "path": "archify/test/cli.test.mjs",
+      "lines": [
+        518,
+        529
+      ],
+      "url": "https://github.com/tt-a1i/archify/blob/5769acefcc2ebd696a4f9ed3ac9cb6cca1d75c70/archify/test/cli.test.mjs#L518-L529",
+      "supports": "测试要求最终检查失败时错误阶段为 check、旧文件内容不变，且没有残留临时目录。本次只阅读此测试，未运行 Archify 上游测试。",
+      "excerpt": "  assert.equal(failure.ok, false);\n  assert.equal(failure.stage, 'check');\n  assert.equal(failure.diagnostics[0].code, 'artifact/single-svg');\n  assert.equal(failure.diagnostics[0].subject.check, 'single_svg');\n  assert.ok(failure.diagnostics[0].supportedFixes.some((fix) => fix.includes('exactly one diagram SVG')));\n  assert.equal(failure.checker.checks.find((entry) => entry.name === 'single_svg').ok, false);\n  assert.equal(fs.readFileSync(out, 'utf8'), trustedPriorArtifact);\n  assert.deepEqual(\n    fs.readdirSync(path.dirname(out)).filter((name) => name.includes('.archify-delivery-')),\n    [],\n  );\n});"
+    }
+  ],
+  "next": [
+    "想学习架构理解方法：在一个陌生项目中选定具体用户行为，从入口追到真正产生结果的位置。每遇到一条关系，都问清谁发起、谁接收、怎样连接、何时发生。",
+    "想掌握交付机制：从 commandDeliver 进入，每读到一个 return 就判断旧文件此时是否已替换，再对照失败测试检查自己的预测。"
+  ]
+}
