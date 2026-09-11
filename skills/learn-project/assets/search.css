@@ -1,0 +1,21 @@
+/* Search navigation leaves a visible target after the result dialog closes. */
+.code-line.search-hit {
+  background: rgb(200 139 66 / 28%);
+  box-shadow: inset 3px 0 var(--focus, #c88b42);
+}
+
+.source-annotation-text.search-hit {
+  border-left-color: var(--focus, #c88b42);
+  background: var(--accent-soft, #eef0fb);
+  color: var(--ink, #20263a);
+}
+
+.evidence > summary.search-hit {
+  outline: 2px solid var(--focus, #c88b42);
+  outline-offset: 3px;
+}
+
+@media print {
+  .code-line.search-hit { background: #f0e7d8; }
+  .source-annotation-text.search-hit { background: #f2f2ef; }
+}

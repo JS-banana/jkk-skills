@@ -1,88 +1,94 @@
 # The project-learning reader
 
-The viewer is owned by this Skill: `scripts/render.py` and `assets/reader.*`.
-It is designed around learning implementation, not a generic document theme.
-Its useful unit is a question connected to a mechanism and evidence. Do not
-edit or require another Skill to create a learning page.
+The Skill owns `scripts/render.py` and `assets/reader.*`. One study JSON generates
+both the offline HTML reader and complete Markdown export. Research determines
+facts and learning order; the renderer determines reusable presentation.
 
-## Compose for understanding
+## Build a reading path
 
-Start with the answer. Give the project a selective map of responsibilities and
-explicitly authored relationships. Node order does not establish dependencies.
-Connect a map node to a deeper mechanism when that relationship was investigated.
-The map is an entry into the explanation, not a substitute for it.
+Start with what someone can do with the project and one useful mental model.
+Keep the overview summary short enough to leave room for the system map; defer
+ports, flags and function names until they answer a question. Do not duplicate
+that summary in a longer introduction. Introduce unfamiliar concepts before
+using them, in the reader's language.
 
-For each mechanism, use a concrete question and a short answer, then a continuous
-reading path. Explain what happens, who invokes it, what changes, and under which
-conditions. A useful step has explanatory prose, not just input/output labels.
-Use state and transition fields only when they help explain the actual behavior.
-The reader presents steps as reading order; it never infers runtime transitions
-from that order. Explicit branches retain normal continuation, failures, and
-loops where relevant. Use the implementation's concepts instead of filling an
-obligatory sequence of stages.
+Use short navigation labels that describe the reader's question. Explanations
+remain continuous within a chapter; the chapter outline scrolls to steps without
+hiding their neighbors. Put constraints and trade-offs near the relevant behavior.
+Source details expand beside the explanation instead of replacing it.
 
-Explain why the mechanism works, its observable trade-offs, and the constraints
-on reusing it. Label inferred rationale; do not ascribe motives to an author
-without support. Show sources beside the claim they support. Source excerpts
-are exact, concise, continuous ranges; illustrative pseudocode belongs in the
-explanation. A source URL is a checking route, not proof of an interpretation.
+A system map answers where responsibilities live and how they connect. Use
+explicit groups for real runtime or ownership boundaries; put protocols on the
+relationships when they describe communication rather than a component. Separate
+startup from request execution, and local state from external services. The renderer
+shows a directed SVG overview with authored labels and can focus one node's direct connections.
+Keep one central collaboration path readable before auxiliary startup and state flows.
+A task selector may highlight existing edges with local step numbers; do not number
+the complete architecture as if it were one global execution sequence.
+Use diagram captions and expand responsibilities and evidence on demand.
+It does not infer topology or turn adjacent cards into a runtime sequence.
 
-The page has one navigation rail, an overview map, a focused step explanation,
-and expandable evidence. Keep the prose self-contained before evidence is
-expanded. For orientation only, omit mechanisms that have not been investigated.
-For a deep question, spend the detail on the implementation rather than making
-its overview larger. The map uses a simple responsive layout; when its edges
-become hard to follow, reduce it to the relevant cooperation and explain the
-subsystem inside a mechanism. Do not infer or omit a consequential relationship
-just to simplify the layout. Relationship text remains available alongside it.
+When useful, add one concrete task journey connecting the overview to mechanisms.
+Track the input, the participating components, an observable result, and a decisive
+failure or branch. A source-based walkthrough must not claim to be an executed run.
+Do not force every project into an application/server/database template.
 
-## Author and render
+## Bind explanation to evidence
 
-Read [study-format.md](study-format.md) for the data contract. The bundled
-`examples/archify.study.json` is a complete worked artifact, useful when learning
-the format; its content is not a template for conclusions about another project.
+A source record must support the nearby claim, not merely mention its subsystem.
+For a consequential connection, inspect caller, registration/assembly, callee and
+important guards. Reusing an import block for several mechanisms is not evidence
+of those mechanisms. Keep measured numbers, guarantees and author intent only when
+the associated evidence establishes them; otherwise narrow or label the claim.
+For decisive excerpts, add a reading goal and a few line-range notes explaining
+guards, state, or failure behavior. Keep notes separate from the exact source;
+never inject AI comments into an excerpt presented as original code.
+Lexical syntax colors and focus-line emphasis serve different purposes.
+Exact excerpts do not establish semantic coverage. Reader confidence comes from
+this reasoning, not the count of green source badges.
 
-Save `study.json` in the user's artifact location, outside the project being
-studied by default. Resolve `LEARN_PROJECT_SKILL` to this Skill directory, not
-the caller's current working directory. Python 3.10+ and its standard library
-are sufficient:
+Use explicit inline code for symbols and commands, emphasis for a small number of
+key distinctions, and term references for concepts that need a short local explanation.
+Do not classify arbitrary English words as code or color every acronym. Read
+[study-format.md](study-format.md) for the additive version-1 fields and safe grammar.
+Keep omitted optional content empty rather than inventing it.
+
+## Render and inspect
+
+Resolve `LEARN_PROJECT_SKILL` to this Skill's directory. Use Python 3.10+:
 
 ```bash
 python3 "$LEARN_PROJECT_SKILL/scripts/render.py" /output/study.json --check
 python3 "$LEARN_PROJECT_SKILL/scripts/render.py" /output/study.json --output /output/study.html
 ```
 
-This generates a self-contained `study.html` and a readable `study.md` beside it.
-CSS and JavaScript are embedded; the HTML opens offline with no server or CDN.
-The Markdown is a complete portable export, not a second source of truth. Keep
-the JSON with the outputs for later questions. Update only relevant explanations
-and evidence, then regenerate the same outputs. Files are replaced individually;
-the two exports are not a multi-file transaction. A failed invocation must not
-be reported as a completed delivery.
+The renderer needs only the standard library. The single HTML has no network,
+server, CDN, package, or other Skill dependency. Keep JSON with the outputs and
+regenerate after corrections. Optional frontmatter is authored in JSON, not added
+to generated Markdown by hand. Files are replaced individually, not as a multi-file
+transaction; do not report success after a partial failure.
 
-The validator checks types, references, safe URL schemes and excerpt line counts.
-It does not read the studied repository or prove source accuracy, architecture,
-runtime behavior, or completeness. Verify these during investigation. Prefer
-fixed-revision HTTP(S) source links for committed public code. For local or dirty
-code use accurate path/symbol locations and excerpts, without creating misleading
-permalinks. Editor `path:line` syntax is not a portable browser URL.
+The validator checks structure, IDs, links, safe escaping, and excerpt line counts.
+It does not inspect repositories or verify the truth of conclusions. Independently
+check exact excerpts against the stated revision and reopen decisive supporting code.
 
-## Inspect what the reader will use
+Inspect a realistic desktop journey with actual long content: overview → mechanism
+→ term → source → return → another step. Check readable line lengths, labeled map
+relations, code overflow, visible focus, browser Back and direct deep links. Search
+must reach hidden chapters as well as the current view, including a symbol found
+only in an excerpt and text found only in a line-range note. Check that repeated
+evidence does not flood results, snippets show the hit, and selection opens the
+right disclosure and source line. Browser Back and reopening a source deep link
+must retain a usable destination. Test manual read/question
+state and explicit resume after reopening; scrolling is not evidence of understanding.
+Content changes must not silently preserve a stale read status. When storage or
+clipboard is unavailable, reading must continue and copy failure must be visible.
 
-Open the generated HTML if browser tooling is available. Check the actual user
-path: understand the answer, select a part, enter its mechanism, switch steps,
-read a branch, and expand its supporting source. Check that navigation and the
-selected explanation agree. Direct section links and browser Back should retain
-that reading context. Do not claim an interaction was checked merely because its
-control exists.
+Use a second, differently shaped study to catch project-specific assumptions.
+Check no-JavaScript sequential reading and printing with all evidence expanded.
+Distinguish interaction checks from target-project runtime tests or comprehensive
+accessibility acceptance. Narrow screens may degrade gracefully; do not expand a
+user's desktop-only scope into mobile redesign.
 
-Check a narrow screen for page overflow and readable code. The full study remains
-in the HTML: without JavaScript it can be read sequentially; printing expands the
-study and its evidence. When available, check these behaviors rather than promise
-them solely from the template. Do not claim a complete accessibility audit from
-a keyboard smoke check.
-
-Deliver the HTML link with a brief substantive answer and what was actually
-checked. Link the data or Markdown when useful for continuation or portability.
-If a local browser requires HTTP, use a loopback-only preview and retain the
-offline file. Do not publish externally merely to provide a preview.
+Deliver the HTML link with a short substantive update and precise verification
+boundaries. Do not duplicate the whole study in chat or publish it merely to preview it.

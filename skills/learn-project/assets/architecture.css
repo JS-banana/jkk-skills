@@ -1,0 +1,39 @@
+/* The overview is a readable document diagram, not a graph editor. */
+.map-board { display: block; overflow-x: auto; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: #fafbfdf0; }
+.architecture { display: block; width: var(--diagram-width); max-width: 100%; min-width: min(var(--diagram-width), 940px); height: auto; font-family: inherit; }
+.architecture-boundary rect { fill: #f1f3f8; stroke: #d9deea; stroke-dasharray: 5 4; }
+.architecture-boundary text { fill: #647089; font-size: 13px; font-weight: 600; }
+.architecture .map-node { display: inline; padding: 0; border: 0; background: none; box-shadow: none; }
+.architecture .map-node rect { fill: #fffefa; stroke: #c9d0df; stroke-width: 1.3; }
+.architecture .map-node:hover rect, .architecture .map-node:focus rect, .architecture .map-node.is-selected rect { fill: #edf0ff; stroke: #6477bd; stroke-width: 2; }
+.architecture .map-node.is-neighbor rect { stroke: #8496c9; }
+.architecture-node-title { fill: #253149; font-size: 16px; font-weight: 650; }
+.architecture-node-caption { fill: #63718a; font-size: 13px; }
+.architecture-edge .edge-stroke { fill: none; stroke: #6176b6; stroke-width: 2; stroke-linejoin: round; }
+.architecture-edge.support .edge-stroke { stroke: #95a0b5; stroke-width: 1.5; stroke-dasharray: 5 4; }
+.edge-hit { fill: none; stroke: transparent; stroke-width: 16; pointer-events: stroke; }
+.architecture-edge:hover .edge-stroke, .architecture-edge:focus .edge-stroke { stroke: #344a8c; stroke-width: 3; }
+.architecture-edge-label > text { fill: #41577f; font-size: 12px; paint-order: stroke; stroke: #fafbfd; stroke-width: 5; stroke-linejoin: round; }
+.architecture-edge-label.support > text { fill: #6f7d92; }
+.architecture .path-order { display: none; }
+.architecture .path-order circle { fill: #455ba0; stroke: #fff; stroke-width: 2; }
+.architecture .path-order text { fill: white; font-size: 12px; font-weight: bold; }
+.architecture.has-path .architecture-edge:not(.on-path), .architecture.has-path .architecture-edge-label:not(.on-path) { opacity: .16; }
+.architecture.has-path .map-node:not(.on-path) { opacity: .4; }
+.architecture .on-path .edge-stroke { stroke: #425ca8; stroke-width: 3; }
+.architecture.has-path .on-path .path-order { display: inline; }
+.map-board.has-selection .architecture-edge:not(.is-relevant), .map-board.has-selection .architecture-edge-label:not(.is-relevant) { opacity: .2; }
+.map-path-control { display: none; align-items: center; gap: 12px; margin: 0 0 16px; color: var(--muted); font-size: .85rem; }
+.enhanced .map-path-control { display: flex; }
+.map-path-control select { max-width: 100%; padding: 8px 34px 8px 12px; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 7px; }
+.map-path-description { margin-bottom: 18px; padding: 14px 18px; border-left: 3px solid var(--accent); background: var(--accent-soft); font-size: .85rem; }
+.map-path-description p { margin: 0; }
+.map-path-description ol { margin: 10px 0 0; padding-left: 20px; }
+.map-legend { font-size: .78rem; color: var(--muted); margin: 10px 0; }
+.relationships li:target { outline: 2px solid var(--accent); outline-offset: 5px; }
+@media print {
+  .map-board { overflow: visible; }
+  .architecture { min-width: 0; width: 100%; }
+  .architecture .map-node, .architecture .architecture-edge, .architecture .architecture-edge-label { opacity: 1 !important; }
+  .architecture .path-order, .map-path-control, .map-path-description { display: none !important; }
+}

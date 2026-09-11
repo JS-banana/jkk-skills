@@ -8,8 +8,8 @@ description: >-
   browser-readable HTML with a traceable Markdown export. Use only when the user
   explicitly invokes $learn-project. Do not use for implementation tasks, general
   code review, or any request that did not name this skill.
-license: MIT
 disable-model-invocation: true
+license: MIT
 ---
 
 # Learn Project
@@ -17,10 +17,6 @@ disable-model-invocation: true
 Help the user build a usable understanding of a project, then deepen it around
 what they want to learn. Connect the overall structure to concrete behavior and,
 when useful, to ideas they can apply elsewhere. Follow the user's language.
-
-Keep the central explanation precise: a passing validator proves only the
-properties it checks. Schema validity, matching hashes, or an existing source
-reference do not by themselves prove that a summary or architecture is true.
 
 ## Manual invocation only
 
@@ -82,70 +78,58 @@ execution conventions. Let the project's own concepts determine the structure.
 Do not invent services, storage, deployment layers, or a single linear path to
 fit a familiar architecture.
 
-Keep the first explanation selective. Include the responsibilities and connections
-needed to understand the project, with reading entry points that say what the
-reader will learn there. Identify promising deeper questions from the project's
-actual behavior and the user's interests, not from a generic list of technologies.
-An overview need not inspect every module or trace every branch.
-For a quick orientation, keep incidental implementation details out of the
-answer even if you inspected them. Explain the main cooperation and prioritize
-the most useful next reading route; defer secondary features and detailed
-subsystem walkthroughs until they serve the user's question.
+Keep the first explanation selective: main responsibilities, their cooperation,
+and reading entry points that say what the reader will learn. Choose deeper
+questions from actual behavior and the user's interests. Defer secondary features
+and incidental implementation details until they serve a question; orientation
+does not require inspecting every module or branch.
 
 ## Follow the question into the implementation
 
-Turn a broad feature name into behavior to explain. For example, understanding
-plugin loading may require finding discovery, registration, selection, invocation,
-and cleanup. It is not answered by summarizing every file named `plugin`.
-
-Trace a concrete input or trigger through the relevant assembly/dispatch and
-core processing to its result. Track the data being transformed, the owner of
-important state, and externally visible effects. Follow failure, retry, callback,
-cancellation, or cleanup paths when they determine the answer.
+Turn a feature name into a concrete behavior: for plugin loading, trace discovery,
+registration, selection, invocation and cleanup rather than files named `plugin`.
+Follow the input through assembly/dispatch to its result, tracking transformed
+data, state ownership and visible effects. Inspect failure, retry, cancellation
+or cleanup when they determine the answer.
 
 For each consequential connection, establish who initiates it, who receives it,
 how they are connected, and under what conditions it occurs. Check callers and
 assembly as well as declarations. An import is not an execution trace; registering
 a callback is not executing it; matching event names do not prove delivery.
 
-Let unresolved questions choose the next read. Keep a small working record of the
-current explanation, its evidence, and the gap that could change it. If the
-explanation jumps over a step, inspect the missing connection rather than
-rewriting the summary. Read a dependency's internals only when its behavior is
-necessary to explain the target mechanism.
-
-Use the available file, search, symbol-navigation, and execution tools according
-to that gap. Independent exploration may be delegated when it saves work, but
-the lead must reconcile findings and reopen decisive evidence. No particular
-tool, index, or delegation capability is required by this skill.
+Keep a small working record of the explanation, supporting evidence and decisive
+gaps. Let those gaps choose the next read, including dependency internals only
+when needed. Independent exploration may be delegated when it saves work; the
+lead must reconcile findings and reopen decisive evidence.
 
 ## Test the explanation against the evidence
 
-For claims that determine the answer, preserve the source location and explain
-what it supports. A real path or valid line number is not enough: the cited code
-must support the claimed responsibility, relationship, or condition. A mechanism
-may span multiple files; do not require it to have one declaration line.
+Check the claims that determine the explanation:
 
-Look for branches, configuration, alternate implementations, or tests that could
-change the explanation. Before stating that a condition is exclusive, check
-the complete guard and its fallthrough with a concrete counterexample; an
-earlier branch not firing does not necessarily mean its input is absent.
-Keep documented intent, observed implementation,
-reasoned inference, and executed behavior distinguishable. Attribute a design
-motive to the author only when a source supports it; otherwise explain the
-observable trade-off and label the inferred rationale.
+- Does the cited implementation support this responsibility or connection?
+  Trace the caller, assembly and decisive guard; a path, import or declaration
+  alone is insufficient. Keep the relevant location even across multiple files.
+- What would change this conclusion? Inspect alternate configuration and the
+  complete guard/fallthrough before claiming a condition is exclusive. Try a
+  concrete counterexample when the distinction matters.
+- Is this documented intent, inspected implementation, inference, or execution?
+  Attribute author motives only to supporting sources. Audit numerical benefits
+  and guarantees against their own evidence, not the mere existence of a mechanism.
+- What did the check establish? Reading a test establishes an expectation;
+  execution establishes the observed outcome within that check's conditions.
+  A passing schema or source-location check does not establish behavioral truth.
 
-Use existing tests or bounded execution when they materially strengthen the
-answer and the environment and task permit it. Inspect the relevant command and
-its effects first. Starting the entire project is not an automatic requirement.
-Reading a test is static evidence of an expectation; report it as executed only
-if it was actually run, with its scope and outcome. A checked happy path does not
-establish every configuration or failure case.
+Run existing tests or bounded execution when they materially resolve a question
+and the task permits it. Inspect the command and its effects first; starting the
+whole project is not a prerequisite. State the remaining gap when decisive
+execution or source is unavailable.
 
 ## Teach the result and leave a useful next step
 
 Lead with the answer at the requested depth. Introduce project-specific concepts
-before using them to explain the flow. Connect the concrete problem, mechanism,
+before using them to explain the flow. Organize the first reading around a user
+action and its result before introducing the names of all subsystems. Keep short
+navigation labels distinct from full technical titles. Connect the concrete problem, mechanism,
 and conditions in readable prose; use a small trace, example, table, or diagram
 when it makes the relationship easier to understand. Build visuals from the same
 checked facts as the explanation, preserving important branches and uncertainty.
@@ -184,6 +168,10 @@ The page connects a selective overview to question-driven mechanisms, individual
 implementation steps, conditions, and source evidence. Keep the answer visible
 before the reader needs to interact. Short clarifications can stay in conversation;
 follow an explicit text-only preference.
+
+Make the main cooperation visible in a directed system overview. Pair decisive
+source excerpts with a reading goal and separate line-range notes; preserve
+original source text.
 
 After investigating, author one study data file using
 [the study format](references/study-format.md). Generate both HTML and a portable
