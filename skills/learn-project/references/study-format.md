@@ -107,10 +107,11 @@ The renderer checks types, IDs, references, URL schemes and safe escaping. It
 does not verify source existence, excerpt accuracy, relationships, or the truth
 of an explanation. The investigating Agent remains responsible for those.
 
-Use the bundled `examples/archify.study.json` as an editable, complete example;
-keep its project-specific conclusions out of unrelated studies. For a short
-orientation, use a compact overview and no mechanisms. For deeper questions,
-add only the mechanisms actually investigated.
+Use the bundled `examples/archify.study.json` as an editable, runnable example
+of the required fields; it does not demonstrate the optional reading structure
+below. Keep its project-specific conclusions out of unrelated studies. For a
+short orientation, use a compact overview and no mechanisms. For deeper
+questions, add only the mechanisms actually investigated.
 
 ## Optional reading structure (backward-compatible with version 1)
 
